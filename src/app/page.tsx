@@ -134,9 +134,9 @@ function ProductGrid() {
         priceNote="per month · cancel anytime"
         bullets={[
           "Every build guide — past, present, and future",
-          "Unlocks all premium Discord channels + the agent recipe vault",
+          "Private Discord community access",
           "#ask-trevor channel — direct line to me, no email queues",
-          "Early access to new tools, agent recipes, and ideas before public release",
+          "Early access to new agent ideas and tools before anyone else",
         ]}
         cta="Join Inner Circle"
         href={LINKS.membership}
