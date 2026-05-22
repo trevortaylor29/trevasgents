@@ -117,8 +117,9 @@ function ProductGrid() {
         priceNote="one-time · yours forever"
         bullets={[
           "17-file plug-n-play pattern pack",
-          "Drop into your LLM — it adapts to your stack",
-          "Day Zero walkthrough for beginners",
+          "Tailors to YOUR business — Etsy, Fiverr, SaaS, YouTube, or your own idea",
+          "Drop into your LLM — adapts to your stack and skill level",
+          "Day Zero walkthrough — works even if you've never built before",
           "Use any LLM: Codex, Claude, OpenClaw",
         ]}
         cta="Get the guide"
@@ -134,9 +135,9 @@ function ProductGrid() {
         priceNote="per month · cancel anytime"
         bullets={[
           "Every build guide — past, present, and future",
-          "Private Discord community access, locked channels + premium vault",
-          "#ask-trevor channel — direct support from me",
-          "Extra sauce — early access to tools and new agent ideas + recipes",
+          "Unlocks all premium Discord channels + the agent recipe vault",
+          "#ask-trevor channel — direct line to me, no email queues",
+          "Early access to new tools, agent recipes, and ideas before public release",
         ]}
         cta="Join Inner Circle"
         href={LINKS.membership}
