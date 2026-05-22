@@ -32,20 +32,41 @@ function Hero() {
   return (
     <section className="relative mx-auto mb-14 flex max-w-3xl flex-col items-center text-center sm:mb-20">
       {/* Logo — small on mobile (~120px), medium on desktop (~200px). Bg-transparent PNG.
-          Aspect is ~5:3 (514×320 after crop), so width drives height. */}
+          Aspect ~5:3 (514×320 after bg-remove + crop). Two animations stacked:
+            1. Subtle float (parent motion.div, ±6px y-axis on a 6s loop)
+            2. Pulsing radial glow behind the logo (absolute child, hue-rotated)
+          Both keyed on `repeat: Infinity`. No GPU cost beyond a blur filter. */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mb-5 sm:mb-8"
+        animate={{ opacity: 1, y: [0, -6, 0, 6, 0] }}
+        transition={{
+          opacity: { duration: 0.6, ease: "easeOut" },
+          y: { duration: 6, repeat: Infinity, ease: "easeInOut", repeatType: "loop" },
+        }}
+        className="relative mb-5 sm:mb-8"
       >
+        {/* Pulsing glow halo behind logo — color cycles violet → pink → cyan */}
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
+          animate={{
+            opacity: [0.45, 0.85, 0.45],
+            scale:   [0.85, 1.15, 0.85],
+          }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(circle, rgba(196,141,253,0.55) 0%, rgba(244,114,182,0.35) 40%, transparent 70%)",
+          }}
+        />
+
         <Image
           src="/logo.png"
           alt="Trevs Agents"
           width={514}
           height={320}
           priority
-          className="h-auto w-[120px] sm:w-[160px] md:w-[200px]"
+          className="relative h-auto w-[120px] sm:w-[160px] md:w-[200px]"
         />
       </motion.div>
 
@@ -132,7 +153,7 @@ function ProductGrid() {
         accent="pink"
         eyebrow="With me"
         title="Guide + Setup Call"
-        price="$100"
+        price="$99"
         priceNote="one-time · guide + 30 min"
         bullets={[
           "Everything in the build guide",
