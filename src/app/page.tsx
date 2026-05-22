@@ -146,18 +146,19 @@ function ProductGrid() {
 
       <ProductCard
         accent="pink"
-        eyebrow="With me"
+        eyebrow="Coming soon"
         title="Guide + Setup Call"
         price="$99"
-        priceNote="one-time · guide + 30 min"
+        priceNote="launching shortly"
         bullets={[
           "Everything in the build guide",
-          "Live 30-minute setup call",
+          "Live 30-minute setup call with me",
           "I walk you through deployment",
           "Personal stack review + first agent",
         ]}
-        cta="Book the call"
+        cta="Coming soon"
         href={LINKS.bundle}
+        comingSoon
         delay={0.1}
       />
 
@@ -215,7 +216,7 @@ const ACCENT: Record<Accent, { border: string; text: string; ring: string; glow:
 };
 
 function ProductCard({
-  accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, delay = 0,
+  accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, comingSoon, delay = 0,
 }: {
   accent: Accent;
   eyebrow: string;
@@ -226,6 +227,7 @@ function ProductCard({
   cta: string;
   href: string;
   featured?: boolean;
+  comingSoon?: boolean;
   delay?: number;
 }) {
   const c = ACCENT[accent];
@@ -277,15 +279,24 @@ function ProductCard({
         ))}
       </ul>
 
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`mt-auto inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold tracking-tight transition-all duration-200 ${c.btn}`}
-      >
-        {cta}
-        <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
-      </a>
+      {comingSoon ? (
+        <div
+          aria-disabled="true"
+          className="mt-auto inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.03] px-4 py-2.5 text-sm font-semibold tracking-tight text-white/50"
+        >
+          {cta}
+        </div>
+      ) : (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`mt-auto inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold tracking-tight transition-all duration-200 ${c.btn}`}
+        >
+          {cta}
+          <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      )}
     </motion.div>
   );
 }
