@@ -32,20 +32,17 @@ function Hero() {
   return (
     <section className="relative mx-auto mb-14 flex max-w-3xl flex-col items-center text-center sm:mb-20">
       {/* Logo — small on mobile (~120px), medium on desktop (~200px). Bg-transparent PNG.
-          Aspect ~5:3 (514×320 after bg-remove + crop). Two animations stacked:
-            1. Subtle float (parent motion.div, ±6px y-axis on a 6s loop)
-            2. Pulsing radial glow behind the logo (absolute child, hue-rotated)
-          Both keyed on `repeat: Infinity`. No GPU cost beyond a blur filter. */}
+          Aspect ~5:3 (514×320 after bg-remove + crop).
+          Animations: gradient color cycle (subtle hue-rotate + brightness) + pulsing glow halo.
+          No float (was distracting). For real orb-movement we'd need the logo as SVG so each
+          circle becomes a separate element — TODO when Trevor regenerates as vector. */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: [0, -6, 0, 6, 0] }}
-        transition={{
-          opacity: { duration: 0.6, ease: "easeOut" },
-          y: { duration: 6, repeat: Infinity, ease: "easeInOut", repeatType: "loop" },
-        }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative mb-5 sm:mb-8"
       >
-        {/* Pulsing glow halo behind logo — color cycles violet → pink → cyan */}
+        {/* Pulsing glow halo behind logo — violet → pink radial blur, slow breathe */}
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 blur-3xl"
@@ -60,14 +57,30 @@ function Hero() {
           }}
         />
 
-        <Image
-          src="/logo.png"
-          alt="Trevs Agents"
-          width={514}
-          height={320}
-          priority
-          className="relative h-auto w-[120px] sm:w-[160px] md:w-[200px]"
-        />
+        {/* Logo with subtle gradient/brightness animation — best we can do with a PNG.
+            For per-orb movement we need SVG. */}
+        <motion.div
+          animate={{
+            filter: [
+              "hue-rotate(0deg) brightness(1) saturate(1)",
+              "hue-rotate(12deg) brightness(1.06) saturate(1.12)",
+              "hue-rotate(0deg) brightness(1) saturate(1)",
+              "hue-rotate(-12deg) brightness(1.06) saturate(1.12)",
+              "hue-rotate(0deg) brightness(1) saturate(1)",
+            ],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="relative"
+        >
+          <Image
+            src="/logo.png"
+            alt="Trevs Agents"
+            width={514}
+            height={320}
+            priority
+            className="h-auto w-[120px] sm:w-[160px] md:w-[200px]"
+          />
+        </motion.div>
       </motion.div>
 
       <motion.h1
