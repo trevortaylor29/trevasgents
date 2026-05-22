@@ -117,10 +117,9 @@ function ProductGrid() {
         priceNote="one-time · yours forever"
         bullets={[
           "17-file plug-n-play pattern pack",
-          "Tailors to YOUR business — Etsy, Fiverr, SaaS, YouTube, or your own idea",
+          "Tailors itself to YOUR business",
           "Drop into your LLM — adapts to your stack and skill level",
           "Day Zero walkthrough — works even if you've never built before",
-          "Use any LLM: Codex, Claude, OpenClaw",
         ]}
         cta="Get the guide"
         href={LINKS.guide}
