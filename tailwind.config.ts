@@ -5,8 +5,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        mono: ["'JetBrains Mono'", "ui-monospace", "monospace"],
-        pixel: ["'Press Start 2P'", "monospace"],
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       boxShadow: {
         glow: "0 0 24px rgba(34, 211, 238, 0.3)",

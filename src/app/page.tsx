@@ -1,11 +1,13 @@
 // Trevs Agents landing page — single-page brand anchor + 4-product surface.
-// Visual: V5 station aesthetic (dark space, pixel/mono fonts, cyan/violet/pink/amber accents).
+// V2 visual upgrade: WebGL shader background + cycling-text headline + real CTA buttons.
 // All product links route directly to Gumroad / Discord — no internal cart, no storefront.
-// Trevor swaps the placeholder URLs once the Gumroad listings exist.
 
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import AnimatedShaderBackground from "@/components/ui/animated-shader-background";
+import AnimatedTextCycle from "@/components/ui/animated-text-cycle";
 
 // ─── CONFIG — replace these URLs once products are created ──────────────────
 const LINKS = {
@@ -13,17 +15,32 @@ const LINKS = {
   bundle:     "https://trevsagents.gumroad.com/l/REPLACE-ME-bundle",       // $100 guide + 30min call
   membership: "https://trevsagents.gumroad.com/l/REPLACE-ME-inner-circle", // $34.99/mo
   discord:    "https://discord.gg/REPLACE-ME-INVITE",                       // permanent invite link
-  tiktok:     "https://www.tiktok.com/@REPLACE-ME",                          // Trevor's AI account
-  twitter:    "https://x.com/REPLACE-ME",                                   // rebranded X
+  tiktok:     "https://www.tiktok.com/@REPLACE-ME",
+  twitter:    "https://x.com/REPLACE-ME",
 } as const;
 
-// ─── Top-level page ─────────────────────────────────────────────────────────
+const BUSINESS_TYPES = [
+  "an Etsy store",
+  "a Fiverr gig",
+  "a SaaS product",
+  "a YouTube channel",
+  "a Shopify store",
+  "your own idea",
+] as const;
+
 export default function Page() {
   return (
-    <main className="relative mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-10 font-mono text-amber-100 sm:px-8 sm:py-16">
-      <Hero />
-      <ProductGrid />
-      <Footer />
+    <main className="relative min-h-screen overflow-hidden">
+      {/* Shader background — covers viewport behind everything */}
+      <AnimatedShaderBackground />
+      {/* Vignette + dark overlay to keep text readable over the shader */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(7,8,13,0.55)_60%,_rgba(7,8,13,0.92)_100%)]" />
+
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-8 sm:px-8 sm:py-12">
+        <Hero />
+        <ProductGrid />
+        <Footer />
+      </div>
     </main>
   );
 }
@@ -32,56 +49,70 @@ export default function Page() {
 function Hero() {
   return (
     <section className="relative mx-auto mb-14 flex max-w-3xl flex-col items-center text-center sm:mb-20">
+      {/* Brand logo — replaces text eyebrow. Sized small on mobile, medium on desktop. */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mb-3 font-pixel text-[10px] uppercase tracking-[0.5em] text-pink-300/80 sm:text-xs"
+        className="mb-6 sm:mb-8"
       >
-        ▸ Trevs Agents ◂
+        <Image
+          src="/logo.png"
+          alt="Trevs Agents"
+          width={743}
+          height={594}
+          priority
+          className="h-auto w-[160px] sm:w-[220px] md:w-[280px]"
+        />
       </motion.div>
 
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
-        className="mb-6 font-pixel text-[20px] leading-[1.4] text-amber-100 sm:text-3xl"
+        className="mb-6 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
       >
-        I run autonomous businesses<br />
-        with <span className="text-cyan-300">AI agents</span>.{" "}
-        <span className="text-violet-300">Build yours.</span>
+        Run{" "}
+        <span className="bg-gradient-to-r from-pink-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
+          <AnimatedTextCycle
+            words={[...BUSINESS_TYPES]}
+            interval={2800}
+            className="font-semibold"
+          />
+        </span>
+        <br />
+        with AI agents.
       </motion.h1>
 
       <motion.p
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
-        className="mb-8 max-w-2xl text-sm leading-relaxed text-amber-100/75 sm:text-base"
+        transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
+        className="mb-8 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
       >
-        My agents design products, edit videos, write content, and handle support — autonomously,
-        while I sleep. The guides below walk you through cloning the pattern. The community is free.
+        The build guide gives you a proven model and the agent stack to run it —
+        whether you already have a business or you&apos;re starting from scratch.
+        Drop it into your LLM, answer a few questions, and walk out with a working
+        operation that runs while you sleep.
       </motion.p>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-        className="flex flex-wrap items-center justify-center gap-4 text-[10px] uppercase tracking-[0.3em] text-amber-200/40 sm:text-xs"
+        transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
+        className="flex flex-wrap items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 sm:text-xs"
       >
-        <span>9 AGENTS</span>
-        <span className="text-pink-400/60">·</span>
-        <span>2 BUSINESSES</span>
-        <span className="text-pink-400/60">·</span>
-        <span>$24/MO STACK</span>
+        <span>Proven models</span>
+        <span className="text-pink-400/40">·</span>
+        <span>Works at any level</span>
+        <span className="text-pink-400/40">·</span>
+        <span>Bring your own LLM</span>
       </motion.div>
     </section>
   );
 }
 
 // ─── PRODUCT GRID ───────────────────────────────────────────────────────────
-// Order: Guide (entry) → Inner Circle (middle, highlighted) → Bundle (high-touch) → Discord (free).
-// Inner Circle sits in the visual middle since it's the middle-price product and has the
-// "Most Popular" badge.
 function ProductGrid() {
   return (
     <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -95,9 +126,9 @@ function ProductGrid() {
           "17-file plug-n-play pattern pack",
           "Drop into your LLM — it adapts to your stack",
           "Day Zero walkthrough for beginners",
-          "All file types covered: Codex, Claude, OpenClaw",
+          "Use any LLM: Codex, Claude, OpenClaw",
         ]}
-        cta="Get the guide →"
+        cta="Get the guide"
         href={LINKS.guide}
         delay={0}
       />
@@ -114,7 +145,7 @@ function ProductGrid() {
           "#ask-trevor channel — direct support from me",
           "Early access to new tools + agent recipes",
         ]}
-        cta="Join Inner Circle →"
+        cta="Join Inner Circle"
         href={LINKS.membership}
         featured
         delay={0.05}
@@ -128,11 +159,11 @@ function ProductGrid() {
         priceNote="one-time · guide + 30 min"
         bullets={[
           "Everything in the build guide",
-          "Live 30-minute setup call with Trev",
+          "Live 30-minute setup call",
           "I walk you through deployment",
           "Personal stack review + first agent",
         ]}
-        cta="Book the call →"
+        cta="Book the call"
         href={LINKS.bundle}
         delay={0.1}
       />
@@ -144,12 +175,12 @@ function ProductGrid() {
         price="Free"
         priceNote="open to all"
         bullets={[
-          "Discord server, no payment required",
-          "Watch the build in public",
-          "Daily Maverick experiment updates",
-          "Talk to other builders",
+          "Chat with other builders",
+          "Ask questions, share what you're building",
+          "Learn from real teardowns + agent setups",
+          "No payment required to join",
         ]}
-        cta="Open Discord →"
+        cta="Open Discord"
         href={LINKS.discord}
         delay={0.15}
       />
@@ -159,11 +190,35 @@ function ProductGrid() {
 
 // ─── CARD COMPONENT ─────────────────────────────────────────────────────────
 type Accent = "cyan" | "pink" | "violet" | "amber";
-const ACCENT: Record<Accent, { border: string; text: string; ring: string; glow: string }> = {
-  cyan:   { border: "border-cyan-300/40",   text: "text-cyan-200",   ring: "hover:border-cyan-300/80 hover:shadow-glow",        glow: "shadow-[0_0_36px_rgba(34,211,238,0.18)]"  },
-  pink:   { border: "border-pink-300/40",   text: "text-pink-200",   ring: "hover:border-pink-300/80 hover:shadow-glow-pink",   glow: "shadow-[0_0_36px_rgba(244,114,182,0.18)]" },
-  violet: { border: "border-violet-300/60", text: "text-violet-200", ring: "hover:border-violet-300 hover:shadow-glow-violet",  glow: "shadow-[0_0_44px_rgba(167,139,250,0.32)]" },
-  amber:  { border: "border-amber-300/30",  text: "text-amber-200",  ring: "hover:border-amber-300/70",                          glow: "" },
+const ACCENT: Record<Accent, { border: string; text: string; ring: string; glow: string; btn: string }> = {
+  cyan: {
+    border: "border-cyan-300/30",
+    text:   "text-cyan-200",
+    ring:   "hover:border-cyan-300/80",
+    glow:   "shadow-[0_0_36px_rgba(34,211,238,0.18)]",
+    btn:    "bg-cyan-400/15 text-cyan-100 hover:bg-cyan-400/30 border-cyan-300/60",
+  },
+  pink: {
+    border: "border-pink-300/30",
+    text:   "text-pink-200",
+    ring:   "hover:border-pink-300/80",
+    glow:   "shadow-[0_0_36px_rgba(244,114,182,0.18)]",
+    btn:    "bg-pink-400/15 text-pink-100 hover:bg-pink-400/30 border-pink-300/60",
+  },
+  violet: {
+    border: "border-violet-300/60",
+    text:   "text-violet-200",
+    ring:   "hover:border-violet-300",
+    glow:   "shadow-[0_0_44px_rgba(167,139,250,0.32)]",
+    btn:    "bg-violet-400/20 text-violet-100 hover:bg-violet-400/40 border-violet-300/80",
+  },
+  amber: {
+    border: "border-amber-300/25",
+    text:   "text-amber-200",
+    ring:   "hover:border-amber-300/70",
+    glow:   "",
+    btn:    "bg-amber-400/15 text-amber-100 hover:bg-amber-400/30 border-amber-300/60",
+  },
 };
 
 function ProductCard({
@@ -182,66 +237,65 @@ function ProductCard({
 }) {
   const c = ACCENT[accent];
   return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
       whileHover={{ y: -4 }}
-      className={`group relative flex flex-col rounded-xl border bg-black/40 p-5 backdrop-blur-sm transition-all duration-200 ${c.border} ${c.ring} ${featured ? c.glow : ""}`}
+      className={`group relative flex flex-col rounded-xl border bg-black/55 p-5 backdrop-blur-md transition-all duration-200 ${c.border} ${c.ring} ${featured ? c.glow : ""}`}
     >
       {featured && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded border border-violet-300/80 bg-violet-500/30 px-2 py-0.5 font-pixel text-[8px] uppercase tracking-widest text-violet-100 shadow-glow-violet">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-violet-300/80 bg-violet-500/30 px-3 py-0.5 font-mono text-[9px] uppercase tracking-widest text-violet-100 shadow-[0_0_18px_rgba(167,139,250,0.55)]">
           🔥 Most Popular
         </div>
       )}
 
-      <div className={`mb-2 text-[9px] uppercase tracking-[0.3em] ${c.text} opacity-70`}>
+      <div className={`mb-2 font-mono text-[9px] uppercase tracking-[0.3em] ${c.text} opacity-70`}>
         {eyebrow}
       </div>
 
-      <h3 className={`mb-4 font-pixel text-[13px] leading-tight ${c.text}`}>
-        {title}
-      </h3>
+      <h3 className={`mb-4 text-lg font-semibold tracking-tight ${c.text}`}>{title}</h3>
 
       <div className="mb-5">
         <div className={`text-3xl font-bold ${c.text}`}>{price}</div>
-        <div className="text-[10px] uppercase tracking-wider text-amber-200/50">{priceNote}</div>
+        <div className="font-mono text-[10px] uppercase tracking-wider text-white/40">{priceNote}</div>
       </div>
 
-      <ul className="mb-6 flex-1 space-y-2 text-[12px] text-amber-100/80">
+      <ul className="mb-6 flex-1 space-y-2 text-sm text-white/80">
         {bullets.map((b, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className={`mt-0.5 ${c.text} opacity-80`}>▸</span>
+          <li key={i} className="flex items-start gap-2 leading-snug">
+            <span className={`mt-1 inline-block size-1.5 shrink-0 rounded-full ${c.text} opacity-60 [background:currentColor]`} />
             <span>{b}</span>
           </li>
         ))}
       </ul>
 
-      <div className={`mt-auto border-t border-current/15 pt-3 text-center text-xs font-bold tracking-wide ${c.text} transition-all group-hover:tracking-widest`}>
+      {/* Real button — distinct surface, clear affordance */}
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`mt-auto inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold tracking-tight transition-all duration-200 ${c.btn}`}
+      >
         {cta}
-      </div>
-    </motion.a>
+        <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+      </a>
+    </motion.div>
   );
 }
 
 // ─── FOOTER ─────────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer className="mt-auto flex flex-col items-center gap-4 border-t border-amber-200/10 pt-8 text-center">
-      <div className="font-pixel text-[8px] uppercase tracking-[0.4em] text-amber-200/40">
-        Run by Trev · Solo builder · Austin, TX
-      </div>
-      <div className="flex items-center gap-5 text-[11px] text-amber-200/60">
+    <footer className="mt-auto flex flex-col items-center gap-4 border-t border-white/10 pt-8 text-center">
+      <div className="flex items-center gap-5 text-sm text-white/60">
         <a href={LINKS.tiktok}  target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-cyan-300">TikTok</a>
         <span className="text-pink-400/40">·</span>
         <a href={LINKS.twitter} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-cyan-300">X / Twitter</a>
         <span className="text-pink-400/40">·</span>
         <a href={LINKS.discord} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-violet-300">Discord</a>
       </div>
-      <div className="text-[10px] text-amber-200/30">© 2026 Trevs Agents</div>
+      <div className="font-mono text-[10px] text-white/30">© 2026 Trevs Agents</div>
     </footer>
   );
 }
