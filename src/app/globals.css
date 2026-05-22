@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #07080d;
+  --ink-amber: #fde68a;
+  --ink-cyan: #67e8f9;
+  --ink-violet: #c4b5fd;
+  --ink-pink: #f9a8d4;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--ink-amber);
+  font-family: "JetBrains Mono", monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top, rgba(124, 58, 237, 0.12), transparent 60%),
+    radial-gradient(ellipse at bottom, rgba(236, 72, 153, 0.08), transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+}
+
+/* Subtle starfield via repeating dots */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 25% 10%, rgba(255,255,255,0.4) 50%, transparent 51%),
+    radial-gradient(1px 1px at 60% 25%, rgba(255,255,255,0.3) 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,0.35) 50%, transparent 51%),
+    radial-gradient(1px 1px at 12% 80%, rgba(255,255,255,0.25) 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,0.3) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 92% 12%, rgba(199, 210, 254, 0.5) 50%, transparent 51%);
+  background-size: 800px 800px;
+  opacity: 0.6;
+  z-index: 0;
+}
