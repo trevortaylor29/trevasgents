@@ -1,6 +1,6 @@
 # tonkasdungeon.com
 
-Landing page for Tonka's Dungeon. Single-page Next.js, deployed to Vercel.
+Landing page for Trevs Agents. Single-page Next.js, deployed to Vercel.
 
 ## Local dev
 ```bash

@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Tonka's Dungeon — Build Your Own AI Agent Operation",
+  title: "Trevs Agents — Build Your Own AI Agent Operation",
   description:
     "Solo founders running autonomous AI agent ecosystems. Build guides, daily Maverick experiment, community for indie builders. Free to join.",
   openGraph: {
-    title: "Tonka's Dungeon — Build Your Own AI Agent Operation",
+    title: "Trevs Agents — Build Your Own AI Agent Operation",
     description: "Solo founders running autonomous AI agent ecosystems.",
     type: "website",
   },

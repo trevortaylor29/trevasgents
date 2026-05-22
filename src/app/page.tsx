@@ -1,4 +1,4 @@
-// Tonka's Dungeon landing page — single-page brand anchor + 4-product surface.
+// Trevs Agents landing page — single-page brand anchor + 4-product surface.
 // Visual: V5 station aesthetic (dark space, pixel/mono fonts, cyan/violet/pink/amber accents).
 // All product links route directly to Gumroad / Discord — no internal cart, no storefront.
 // Trevor swaps the placeholder URLs once the Gumroad listings exist.
@@ -38,7 +38,7 @@ function Hero() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="mb-3 font-pixel text-[10px] uppercase tracking-[0.5em] text-pink-300/80 sm:text-xs"
       >
-        ▸ Tonka's Dungeon ◂
+        ▸ Trevs Agents ◂
       </motion.div>
 
       <motion.h1
@@ -241,7 +241,7 @@ function Footer() {
         <span className="text-pink-400/40">·</span>
         <a href={LINKS.discord} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-violet-300">Discord</a>
       </div>
-      <div className="text-[10px] text-amber-200/30">© 2026 Tonka's Dungeon</div>
+      <div className="text-[10px] text-amber-200/30">© 2026 Trevs Agents</div>
     </footer>
   );
 }
