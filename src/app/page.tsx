@@ -10,8 +10,8 @@ import { motion } from "framer-motion";
 const LINKS = {
   guide:      "https://trevsagents.gumroad.com/l/tonkas-dungeon-build-guide",
   bundle:     "https://trevsagents.gumroad.com/l/REPLACE-ME-bundle",       // $100 guide + 30min call
-  membership: "https://trevsagents.gumroad.com/l/REPLACE-ME-inner-circle", // $34.99/mo
-  discord:    "https://discord.gg/REPLACE-ME-INVITE",                       // permanent invite link
+  membership: "https://trevsagents.gumroad.com/l/innercircle", // $34.99/mo
+  discord:    "https://discord.gg/UavPhfVP3V",                              // permanent invite to Trevs Agents server
   tiktok:     "https://www.tiktok.com/@REPLACE-ME",
   twitter:    "https://x.com/REPLACE-ME",
 } as const;
@@ -134,7 +134,7 @@ function ProductGrid() {
         priceNote="per month · cancel anytime"
         bullets={[
           "Every build guide — past, present, and future",
-          "Private Discord access, locked channels + premium vault",
+          "Private Discord community access, locked channels + premium vault",
           "#ask-trevor channel — direct support from me",
           "Extra sauce — early access to tools and new agent ideas + recipes",
         ]}
