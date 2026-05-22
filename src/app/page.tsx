@@ -47,9 +47,9 @@ function Hero() {
         transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
         className="mb-6 font-pixel text-[20px] leading-[1.4] text-amber-100 sm:text-3xl"
       >
-        Build your own<br />
-        <span className="text-cyan-300">AI agent</span>{" "}
-        <span className="text-violet-300">operation.</span>
+        I run autonomous businesses<br />
+        with <span className="text-cyan-300">AI agents</span>.{" "}
+        <span className="text-violet-300">Build yours.</span>
       </motion.h1>
 
       <motion.p
@@ -58,9 +58,8 @@ function Hero() {
         transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
         className="mb-8 max-w-2xl text-sm leading-relaxed text-amber-100/75 sm:text-base"
       >
-        I run a 9-agent stack that designs products, edits videos, writes content, and handles
-        support — autonomously, while I sleep. The guides below walk you through cloning the
-        pattern. The community is free.
+        My agents design products, edit videos, write content, and handle support — autonomously,
+        while I sleep. The guides below walk you through cloning the pattern. The community is free.
       </motion.p>
 
       <motion.div
@@ -80,15 +79,18 @@ function Hero() {
 }
 
 // ─── PRODUCT GRID ───────────────────────────────────────────────────────────
+// Order: Guide (entry) → Inner Circle (middle, highlighted) → Bundle (high-touch) → Discord (free).
+// Inner Circle sits in the visual middle since it's the middle-price product and has the
+// "Most Popular" badge.
 function ProductGrid() {
   return (
     <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       <ProductCard
         accent="cyan"
-        eyebrow="One-time"
+        eyebrow="One-time purchase"
         title="The Build Guide"
         price="$29"
-        priceNote="one-time"
+        priceNote="one-time · yours forever"
         bullets={[
           "17-file plug-n-play pattern pack",
           "Drop into your LLM — it adapts to your stack",
@@ -101,28 +103,11 @@ function ProductGrid() {
       />
 
       <ProductCard
-        accent="pink"
-        eyebrow="With me"
-        title="Guide + Setup Call"
-        price="$100"
-        priceNote="guide + 30 min"
-        bullets={[
-          "Everything in the build guide",
-          "Live 30-minute setup call with Trev",
-          "I walk you through deployment",
-          "Personal stack review + first agent",
-        ]}
-        cta="Book the call →"
-        href={LINKS.bundle}
-        delay={0.05}
-      />
-
-      <ProductCard
         accent="violet"
         eyebrow="Most popular"
         title="Inner Circle"
         price="$34.99"
-        priceNote="per month"
+        priceNote="per month · cancel anytime"
         bullets={[
           "Every guide — past, present, and future",
           "Locked Discord channels + premium vault",
@@ -132,6 +117,23 @@ function ProductGrid() {
         cta="Join Inner Circle →"
         href={LINKS.membership}
         featured
+        delay={0.05}
+      />
+
+      <ProductCard
+        accent="pink"
+        eyebrow="With me"
+        title="Guide + Setup Call"
+        price="$100"
+        priceNote="one-time · guide + 30 min"
+        bullets={[
+          "Everything in the build guide",
+          "Live 30-minute setup call with Trev",
+          "I walk you through deployment",
+          "Personal stack review + first agent",
+        ]}
+        cta="Book the call →"
+        href={LINKS.bundle}
         delay={0.1}
       />
 
