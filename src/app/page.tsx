@@ -11,7 +11,7 @@ const LINKS = {
   guide:      "https://trevsagents.gumroad.com/l/tonkas-dungeon-build-guide",
   bundle:     "https://trevsagents.gumroad.com/l/REPLACE-ME-bundle",       // $100 guide + 30min call
   membership: "https://trevsagents.gumroad.com/l/innercircle", // $34.99/mo
-  discord:    "https://discord.gg/UavPhfVP3V",                              // permanent invite to Trevs Agents server
+  discord:    "https://discord.gg/5BfG5Wuwfr",                              // permanent invite to Trevs Agents server (never-expires)
   tiktok:     "https://www.tiktok.com/@REPLACE-ME",
   twitter:    "https://x.com/REPLACE-ME",
 } as const;
