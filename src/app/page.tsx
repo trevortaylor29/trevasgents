@@ -1,13 +1,11 @@
 // Trevs Agents landing page — single-page brand anchor + 4-product surface.
-// V2 visual upgrade: WebGL shader background + cycling-text headline + real CTA buttons.
-// All product links route directly to Gumroad / Discord — no internal cart, no storefront.
+// Visual: CSS starfield bg (no heavy WebGL — mobile-friendly), Geist fonts, real CTA buttons,
+// transparent-bg logo. Static headline with one gradient-highlighted phrase.
 
 "use client";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import AnimatedShaderBackground from "@/components/ui/animated-shader-background";
-import AnimatedTextCycle from "@/components/ui/animated-text-cycle";
 
 // ─── CONFIG — replace these URLs once products are created ──────────────────
 const LINKS = {
@@ -19,28 +17,12 @@ const LINKS = {
   twitter:    "https://x.com/REPLACE-ME",
 } as const;
 
-const BUSINESS_TYPES = [
-  "an Etsy store",
-  "a Fiverr gig",
-  "a SaaS product",
-  "a YouTube channel",
-  "a Shopify store",
-  "your own idea",
-] as const;
-
 export default function Page() {
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* Shader background — covers viewport behind everything */}
-      <AnimatedShaderBackground />
-      {/* Vignette + dark overlay to keep text readable over the shader */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(7,8,13,0.55)_60%,_rgba(7,8,13,0.92)_100%)]" />
-
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-8 sm:px-8 sm:py-12">
-        <Hero />
-        <ProductGrid />
-        <Footer />
-      </div>
+    <main className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-8 sm:px-8 sm:py-12">
+      <Hero />
+      <ProductGrid />
+      <Footer />
     </main>
   );
 }
@@ -49,20 +31,21 @@ export default function Page() {
 function Hero() {
   return (
     <section className="relative mx-auto mb-14 flex max-w-3xl flex-col items-center text-center sm:mb-20">
-      {/* Brand logo — replaces text eyebrow. Sized small on mobile, medium on desktop. */}
+      {/* Logo — small on mobile (~120px), medium on desktop (~200px). Bg-transparent PNG.
+          Aspect is ~5:3 (514×320 after crop), so width drives height. */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="mb-6 sm:mb-8"
+        className="mb-5 sm:mb-8"
       >
         <Image
           src="/logo.png"
           alt="Trevs Agents"
-          width={743}
-          height={594}
+          width={514}
+          height={320}
           priority
-          className="h-auto w-[160px] sm:w-[220px] md:w-[280px]"
+          className="h-auto w-[120px] sm:w-[160px] md:w-[200px]"
         />
       </motion.div>
 
@@ -72,16 +55,10 @@ function Hero() {
         transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
         className="mb-6 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
       >
-        Run{" "}
+        Run an autonomous business{" "}
         <span className="bg-gradient-to-r from-pink-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
-          <AnimatedTextCycle
-            words={[...BUSINESS_TYPES]}
-            interval={2800}
-            className="font-semibold"
-          />
+          with AI agents.
         </span>
-        <br />
-        with AI agents.
       </motion.h1>
 
       <motion.p
@@ -92,8 +69,8 @@ function Hero() {
       >
         The build guide gives you a proven model and the agent stack to run it —
         whether you already have a business or you&apos;re starting from scratch.
-        Drop it into your LLM, answer a few questions, and walk out with a working
-        operation that runs while you sleep.
+        Etsy, Fiverr, SaaS, YouTube, or your own idea — drop the guide into your
+        LLM and walk out with a working operation that runs while you sleep.
       </motion.p>
 
       <motion.div
@@ -270,7 +247,6 @@ function ProductCard({
         ))}
       </ul>
 
-      {/* Real button — distinct surface, clear affordance */}
       <a
         href={href}
         target="_blank"
