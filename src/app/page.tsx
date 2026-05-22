@@ -56,19 +56,12 @@ function Hero() {
           }}
         />
 
-        {/* Animated logo video — Trevor's MJ-generated loop. The MP4 has a dark navy
-            background baked in; `mix-blend-mode: screen` blends those darks into the
-            near-black page canvas, so the bg effectively disappears while the bright
-            pink/violet brain + wordmark stays full color. No alpha encoding needed. */}
-        <video
-          src="/logo.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-label="Trevs Agents"
-          className="relative h-auto w-[140px] sm:w-[180px] md:w-[220px]"
-          style={{ mixBlendMode: "screen" }}
+        {/* Animated logo — Trevor's MJ-generated loop, chromakeyed + cropped tight,
+            encoded as animated WebP with true alpha. Native loop, no blend-mode tricks. */}
+        <img
+          src="/logo.webp"
+          alt="Trevs Agents"
+          className="relative h-auto w-[160px] sm:w-[200px] md:w-[240px]"
         />
       </motion.div>
 
@@ -79,7 +72,7 @@ function Hero() {
         className="mb-6 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
       >
         Run an autonomous business{" "}
-        <span className="bg-gradient-to-r from-pink-300 via-violet-300 to-cyan-300 bg-clip-text text-transparent">
+        <span className="animate-gradient-text">
           with AI agents.
         </span>
       </motion.h1>
@@ -241,11 +234,25 @@ function ProductCard({
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.5, ease: "easeOut" }}
-      whileHover={{ y: -4 }}
-      className={`group relative flex flex-col rounded-xl border bg-black/55 p-5 backdrop-blur-md transition-all duration-200 ${c.border} ${c.ring} ${featured ? c.glow : ""}`}
+      whileHover={{ y: -6 }}
+      className={`group relative flex flex-col rounded-xl border p-5 backdrop-blur-md transition-all duration-200 ${
+        featured
+          ? // Inner Circle — pops out: scaled slightly, raised, brand-gradient border, premium glow
+            "scale-[1.04] lg:scale-[1.07] z-10 border-2 bg-gradient-to-b from-violet-500/[0.08] to-black/60 shadow-[0_0_50px_rgba(167,139,250,0.35)] hover:shadow-[0_0_70px_rgba(167,139,250,0.55)]"
+          : `bg-black/55 ${c.border} ${c.ring}`
+      }`}
+      style={
+        featured
+          ? {
+              // Gradient border via background-image trick on the wrapper
+              borderImage: "linear-gradient(135deg, #f9a8d4, #c4b5fd, #67e8f9) 1",
+              borderImageSlice: 1,
+            }
+          : undefined
+      }
     >
       {featured && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full border border-violet-300/80 bg-violet-500/30 px-3 py-0.5 font-mono text-[9px] uppercase tracking-widest text-violet-100 shadow-[0_0_18px_rgba(167,139,250,0.55)]">
+        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 rounded-full bg-gradient-to-r from-pink-400 via-violet-400 to-cyan-400 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-black shadow-[0_0_22px_rgba(167,139,250,0.7)]">
           🔥 Most Popular
         </div>
       )}

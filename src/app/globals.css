@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Animated gradient text — used on the "with AI agents." accent in the hero.
+   The gradient is wider than the text (300% background-size) and slides horizontally
+   on a slow loop. Looks like the colors are flowing across the words. */
+@keyframes gradient-slide {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+.animate-gradient-text {
+  background-image: linear-gradient(
+    90deg,
+    #f9a8d4 0%,
+    #c4b5fd 25%,
+    #67e8f9 50%,
+    #c4b5fd 75%,
+    #f9a8d4 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  animation: gradient-slide 8s linear infinite;
+}
+
 :root {
   --bg: #07080d;
   --ink: #f4f1ec;
