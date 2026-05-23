@@ -65,6 +65,17 @@ function Hero() {
         />
       </motion.div>
 
+      {/* Social proof pill — builds trust at first glance. Update count as sales grow. */}
+      <motion.div
+        initial={{ opacity: 0, y: -6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05, duration: 0.5, ease: "easeOut" }}
+        className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-50 backdrop-blur-sm"
+      >
+        <span aria-hidden="true">🔥</span>
+        <span>30+ builders already inside</span>
+      </motion.div>
+
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -116,12 +127,12 @@ function ProductGrid() {
         price="$29"
         priceNote="one-time · yours forever"
         bullets={[
-          "17-file plug-n-play pattern pack",
+          "Complete step-by-step setup guide",
           "Tailors itself to YOUR business",
           "Drop into your LLM — adapts to your stack and skill level",
           "Day Zero walkthrough — works even if you've never built before",
         ]}
-        cta="Get the guide"
+        cta="Start building"
         href={LINKS.guide}
         delay={0}
       />
