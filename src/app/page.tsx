@@ -237,9 +237,9 @@ function ProductGrid() {
         price="$29.99"
         priceNote="per month · cancel anytime"
         bullets={[
-          "Every build guide — past, present, and future",
+          "ALL my guides — past, current, and future",
           "Private Discord community access",
-          "1-on-1 support — get unstuck in minutes, not days",
+          "1-on-1 support — get direct help from me",
           "Early access to new agent ideas and tools",
         ]}
         cta="Get everything"
