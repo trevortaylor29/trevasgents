@@ -121,27 +121,10 @@ function ProductGrid() {
   return (
     <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       <ProductCard
-        accent="cyan"
-        eyebrow="One-time purchase"
-        title="The Build Guide"
-        price="$29"
-        priceNote="one-time · yours forever"
-        bullets={[
-          "Complete step-by-step setup guide",
-          "Tailors itself to YOUR business",
-          "Drop into your LLM — adapts to your stack and skill level",
-          "Day Zero walkthrough — works even if you've never built before",
-        ]}
-        cta="Start building"
-        href={LINKS.guide}
-        delay={0}
-      />
-
-      <ProductCard
         accent="violet"
-        eyebrow="Most popular"
+        eyebrow="Best value · includes the guide"
         title="Inner Circle"
-        price="$34.99"
+        price="$29.99"
         priceNote="per month · cancel anytime"
         bullets={[
           "Every build guide — past, present, and future",
@@ -152,6 +135,23 @@ function ProductGrid() {
         cta="Join Inner Circle"
         href={LINKS.membership}
         featured
+        delay={0}
+      />
+
+      <ProductCard
+        accent="cyan"
+        eyebrow="Just the guide"
+        title="The Build Guide"
+        price="$24.99"
+        priceNote="one-time · yours forever"
+        bullets={[
+          "Complete step-by-step setup guide",
+          "Tailors itself to YOUR business",
+          "Drop into your LLM — adapts to your stack and skill level",
+          "Day Zero walkthrough — works even if you've never built before",
+        ]}
+        cta="Start building"
+        href={LINKS.guide}
         delay={0.05}
       />
 
