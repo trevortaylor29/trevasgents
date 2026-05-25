@@ -73,7 +73,7 @@ function Hero() {
         className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-50 backdrop-blur-sm"
       >
         <span aria-hidden="true">🔥</span>
-        <span>30+ builders already inside</span>
+        <span>40+ builders already inside</span>
       </motion.div>
 
       <motion.h1
@@ -121,37 +121,36 @@ function ProductGrid() {
   return (
     <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       <ProductCard
-        accent="violet"
-        eyebrow="Best value · includes the guide"
-        title="Inner Circle"
-        price="$29.99"
-        priceNote="per month · cancel anytime"
-        bullets={[
-          "Every build guide — past, present, and future",
-          "Private Discord community access",
-          "#ask-trevor channel — direct line to me, no email queues",
-          "Early access to new agent ideas and tools before anyone else",
-        ]}
-        cta="Join Inner Circle"
-        href={LINKS.membership}
-        featured
-        delay={0}
-      />
-
-      <ProductCard
         accent="cyan"
-        eyebrow="Just the guide"
+        eyebrow="One-time purchase"
         title="The Build Guide"
         price="$24.99"
         priceNote="one-time · yours forever"
         bullets={[
           "Complete step-by-step setup guide",
           "Tailors itself to YOUR business",
-          "Drop into your LLM — adapts to your stack and skill level",
           "Day Zero walkthrough — works even if you've never built before",
         ]}
         cta="Start building"
         href={LINKS.guide}
+        delay={0}
+      />
+
+      <ProductCard
+        accent="violet"
+        eyebrow="Best value · everything in the guide + more"
+        title="Inner Circle"
+        price="$29.99"
+        priceNote="per month · cancel anytime"
+        bullets={[
+          "Every build guide — past, present, and future",
+          "Private Discord community access",
+          "#ask-trevor — direct line to me, no email queues",
+          "Early access to new agent ideas and tools",
+        ]}
+        cta="Get everything"
+        href={LINKS.membership}
+        featured
         delay={0.05}
       />
 
