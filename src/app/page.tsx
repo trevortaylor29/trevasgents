@@ -20,9 +20,102 @@ export default function Page() {
   return (
     <main className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-8 sm:px-8 sm:py-12">
       <Hero />
+      <CompareStrip />
       <ProductGrid />
       <Footer />
     </main>
+  );
+}
+
+// ─── COMPARE STRIP ──────────────────────────────────────────────────────────
+// Forces the value comparison BEFORE visitors click a card. Without this,
+// most TikTok visitors impulse-click the cheaper guide and never see Inner
+// Circle. The math is explicit at a glance.
+function CompareStrip() {
+  const rows: { feature: string; inGuide: boolean }[] = [
+    { feature: "Current build guide",       inGuide: true  },
+    { feature: "Every future guide",         inGuide: false },
+    { feature: "Private Discord community",  inGuide: false },
+    { feature: "1-on-1 support",             inGuide: false },
+    { feature: "Early access to new tools",  inGuide: false },
+  ];
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
+      className="mx-auto mb-10 w-full max-w-2xl sm:mb-14"
+    >
+      <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-md sm:p-7">
+        <div className="mb-5 text-center">
+          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-violet-300/70">
+            Which one?
+          </div>
+          <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
+            Build Guide vs. Inner Circle
+          </h2>
+        </div>
+
+        {/* Column headers */}
+        <div className="grid grid-cols-[1.6fr_0.7fr_0.7fr] items-end gap-2 border-b border-white/10 pb-3 sm:gap-4">
+          <div />
+          <div className="text-center">
+            <div className="text-xs font-semibold text-cyan-200 sm:text-sm">Build Guide</div>
+            <div className="font-mono text-[10px] text-white/50">$24.99 once</div>
+          </div>
+          <div className="text-center">
+            <div className="text-xs font-semibold text-violet-200 sm:text-sm">Inner Circle</div>
+            <div className="font-mono text-[10px] text-white/50">$29.99/mo</div>
+          </div>
+        </div>
+
+        {/* Feature rows */}
+        {rows.map((row, i) => (
+          <div
+            key={row.feature}
+            className={`grid grid-cols-[1.6fr_0.7fr_0.7fr] items-center gap-2 py-2.5 text-[13px] sm:gap-4 sm:text-sm ${
+              i < rows.length - 1 ? "border-b border-white/5" : ""
+            }`}
+          >
+            <div className="leading-snug text-white/80">{row.feature}</div>
+            <div className="flex justify-center">
+              {row.inGuide ? <Check /> : <Dash />}
+            </div>
+            <div className="flex justify-center">
+              <Check />
+            </div>
+          </div>
+        ))}
+
+        <div className="mt-4 text-center text-[11px] text-white/50">
+          Inner Circle pays for itself if you'd buy <span className="text-white/70">2 future guides</span> in a year.
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
+function Check() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-4 text-emerald-300 sm:size-5" aria-hidden="true">
+      <path
+        d="M4 10.5l4 4 8-9"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Dash() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-4 text-white/25 sm:size-5" aria-hidden="true">
+      <path d="M4 10h12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
   );
 }
 
@@ -145,7 +238,7 @@ function ProductGrid() {
         bullets={[
           "Every build guide — past, present, and future",
           "Private Discord community access",
-          "#ask-trevor — direct line to me, no email queues",
+          "1-on-1 support — get unstuck in minutes, not days",
           "Early access to new agent ideas and tools",
         ]}
         cta="Get everything"
