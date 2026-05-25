@@ -33,11 +33,12 @@ export default function Page() {
 // Circle. The math is explicit at a glance.
 function CompareStrip() {
   const rows: { feature: string; inGuide: boolean }[] = [
-    { feature: "Current build guide",       inGuide: true  },
-    { feature: "Every future guide",         inGuide: false },
-    { feature: "Private Discord community",  inGuide: false },
-    { feature: "1-on-1 support",             inGuide: false },
-    { feature: "Early access to new tools",  inGuide: false },
+    { feature: "Current build guide",                inGuide: true  },
+    { feature: "Every future guide",                  inGuide: false },
+    { feature: "New agent + revenue ideas, weekly",   inGuide: false },
+    { feature: "Private Discord community",           inGuide: false },
+    { feature: "1-on-1 support",                      inGuide: false },
+    { feature: "Early access to new tools",           inGuide: false },
   ];
 
   return (
@@ -89,7 +90,7 @@ function CompareStrip() {
         ))}
 
         <div className="mt-4 text-center text-[11px] text-white/50">
-          Inner Circle pays for itself if you'd buy <span className="text-white/70">2 future guides</span> in a year.
+          Over <span className="font-semibold text-violet-200">6× the value</span> of the guide alone — for <span className="text-white/70">$5/mo more</span>.
         </div>
       </div>
     </motion.section>
