@@ -176,7 +176,7 @@ function Hero() {
         transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
         className="mb-6 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
       >
-        Run an autonomous business{" "}
+        Run an existing business — or build a new one —{" "}
         <span className="animate-gradient-text">
           with AI agents.
         </span>
