@@ -1,0 +1,164 @@
+// Post-purchase claim page for Inner Circle members.
+// Gumroad redirects buyers here with ?sale=<purchase_id>. They type their
+// Discord username, we POST it to the VPS API, the bot grants their role.
+// Replaces the unreliable Gumroad custom-field flow (can't be made required).
+
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+
+const API_BASE = "http://157.173.196.139:3001";
+
+type ClaimState =
+  | { kind: "idle" }
+  | { kind: "submitting" }
+  | { kind: "success"; message: string; discord_username: string }
+  | { kind: "error"; message: string };
+
+function ClaimInner() {
+  const params  = useSearchParams();
+  const saleId  = params.get("sale") || "";
+  const [discordUsername, setDiscordUsername] = useState("");
+  const [state, setState] = useState<ClaimState>({ kind: "idle" });
+
+  // Persist the sale_id so refreshing the page doesn't lose it
+  useEffect(() => {
+    if (saleId) {
+      try { localStorage.setItem("ic_last_sale", saleId); } catch {}
+    }
+  }, [saleId]);
+
+  const effectiveSaleId = saleId || (typeof window !== "undefined"
+    ? localStorage.getItem("ic_last_sale") || ""
+    : "");
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!effectiveSaleId) {
+      setState({ kind: "error", message: "Missing sale ID. Did you come from your Gumroad purchase confirmation?" });
+      return;
+    }
+    if (!discordUsername.trim()) {
+      setState({ kind: "error", message: "Type your Discord username first." });
+      return;
+    }
+    setState({ kind: "submitting" });
+    try {
+      const r = await fetch(`${API_BASE}/inner-circle/claim`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ sale_id: effectiveSaleId, discord_username: discordUsername.trim() }),
+      });
+      const j = await r.json();
+      if (!j.ok) {
+        setState({ kind: "error", message: j.message || j.error || "Couldn't claim — try again." });
+      } else {
+        setState({
+          kind: "success",
+          message: j.message || "You're in. Open Discord to see your role.",
+          discord_username: j.discord_username || discordUsername.trim(),
+        });
+      }
+    } catch (err) {
+      setState({ kind: "error", message: `Network error: ${err instanceof Error ? err.message : String(err)}` });
+    }
+  }
+
+  return (
+    <main className="relative z-10 mx-auto flex min-h-screen max-w-xl flex-col items-center justify-center px-5 py-12 sm:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full rounded-2xl border border-violet-400/30 bg-gradient-to-b from-violet-500/[0.08] to-black/60 p-7 backdrop-blur-md shadow-[0_0_50px_rgba(167,139,250,0.25)]"
+      >
+        <div className="mb-1 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-violet-300/70">
+          Inner Circle
+        </div>
+        <h1 className="mb-6 text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+          One step left — unlock your role
+        </h1>
+
+        {state.kind === "success" ? (
+          <div className="space-y-4">
+            <div className="rounded-lg border border-emerald-400/40 bg-emerald-500/[0.06] p-4 text-center">
+              <div className="mb-2 text-2xl">✓</div>
+              <p className="text-sm leading-relaxed text-emerald-100">
+                Linked <span className="font-semibold text-white">{state.discord_username}</span> to your subscription.
+              </p>
+              <p className="mt-2 text-xs text-white/70">{state.message}</p>
+            </div>
+            <a
+              href="https://discord.gg/5BfG5Wuwfr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-lg border border-violet-300/60 bg-violet-400/20 px-4 py-3 text-center text-sm font-semibold text-violet-100 transition-colors hover:bg-violet-400/35"
+            >
+              Open Discord →
+            </a>
+            <p className="text-center text-[11px] text-white/40">
+              If your role doesn&apos;t appear within a minute, double-check your username matches your Discord profile exactly (case-sensitive, no #).
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={submit} className="space-y-4">
+            <div>
+              <label htmlFor="discord" className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-white/60">
+                Your Discord username
+              </label>
+              <input
+                id="discord"
+                type="text"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="trevortaylor29"
+                value={discordUsername}
+                onChange={(e) => setDiscordUsername(e.target.value)}
+                disabled={state.kind === "submitting"}
+                className="w-full rounded-lg border border-white/15 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400/30 disabled:opacity-50"
+              />
+              <p className="mt-1.5 text-[11px] text-white/40">
+                Your full Discord handle — no <span className="font-mono">@</span>, no <span className="font-mono">#</span>. Find it in Discord → Settings → My Account.
+              </p>
+            </div>
+
+            {state.kind === "error" && (
+              <div className="rounded-lg border border-red-400/30 bg-red-500/[0.06] p-3 text-sm text-red-200">
+                {state.message}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={state.kind === "submitting" || !effectiveSaleId}
+              className="w-full rounded-lg border border-violet-300/60 bg-violet-400/20 px-4 py-3 text-sm font-semibold text-violet-100 transition-colors hover:bg-violet-400/35 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {state.kind === "submitting" ? "Linking…" : "Unlock Inner Circle"}
+            </button>
+
+            {!effectiveSaleId && (
+              <p className="text-center text-[11px] text-amber-300/70">
+                ⚠ Missing sale ID in URL. Use the link from your Gumroad confirmation page.
+              </p>
+            )}
+          </form>
+        )}
+
+        <p className="mt-6 text-center text-[10px] text-white/30">
+          Need help? Ping Trevor in the free Discord:{" "}
+          <a href="https://discord.gg/5BfG5Wuwfr" className="underline hover:text-white/60">join here</a>
+        </p>
+      </motion.div>
+    </main>
+  );
+}
+
+export default function ClaimPage() {
+  return (
+    <Suspense fallback={null}>
+      <ClaimInner />
+    </Suspense>
+  );
+}
