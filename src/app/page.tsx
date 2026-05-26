@@ -224,6 +224,7 @@ function ProductGrid() {
           "Complete step-by-step setup guide",
           "Tailors itself to YOUR business",
           "Day Zero walkthrough — works even if you've never built before",
+          "Note: Inner Circle includes this guide. Don't buy both.",
         ]}
         cta="Start building"
         href={LINKS.guide}
@@ -237,6 +238,7 @@ function ProductGrid() {
         price="$29.99"
         priceNote="per month · cancel anytime"
         bullets={[
+          "👉 Build Guide INCLUDED (no need to buy it separately)",
           "ALL my guides — past, current, and future",
           "Private Discord community access",
           "1-on-1 support — get direct help from me",
