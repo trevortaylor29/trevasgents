@@ -9,11 +9,9 @@
 
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-
-const API_BASE = "http://157.173.196.139:3001";
 
 type ClaimState =
   | { kind: "idle" }
@@ -23,20 +21,10 @@ type ClaimState =
 
 function ClaimInner() {
   const params  = useSearchParams();
-  const saleId  = params.get("sale") || "";
+  const saleId  = params.get("sale") || "";  // only honored if present in current URL
   const [email,           setEmail]           = useState("");
   const [discordUsername, setDiscordUsername] = useState("");
   const [state, setState] = useState<ClaimState>({ kind: "idle" });
-
-  useEffect(() => {
-    if (saleId) {
-      try { localStorage.setItem("ic_last_sale", saleId); } catch {}
-    }
-  }, [saleId]);
-
-  const effectiveSaleId = saleId || (typeof window !== "undefined"
-    ? localStorage.getItem("ic_last_sale") || ""
-    : "");
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,17 +32,18 @@ function ClaimInner() {
       setState({ kind: "error", message: "Type your Discord username first." });
       return;
     }
-    if (!effectiveSaleId && !email.trim()) {
+    if (!saleId && !email.trim()) {
       setState({ kind: "error", message: "Enter the email you used at Gumroad checkout." });
       return;
     }
     setState({ kind: "submitting" });
     try {
       const body: Record<string, string> = { discord_username: discordUsername.trim() };
-      if (effectiveSaleId) body.sale_id = effectiveSaleId;
-      else                 body.email   = email.trim();
+      if (saleId) body.sale_id = saleId;
+      else        body.email   = email.trim();
 
-      const r = await fetch(`${API_BASE}/inner-circle/claim`, {
+      // Same-origin proxy → VPS (avoids HTTPS-to-HTTP mixed-content block)
+      const r = await fetch("/api/claim", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify(body),
@@ -112,7 +101,7 @@ function ClaimInner() {
           </div>
         ) : (
           <form onSubmit={submit} className="space-y-4">
-            {!effectiveSaleId && (
+            {!saleId && (
               <div>
                 <label htmlFor="email" className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-white/60">
                   Email you used at Gumroad checkout
