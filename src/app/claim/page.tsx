@@ -1,7 +1,11 @@
 // Post-purchase claim page for Inner Circle members.
-// Gumroad redirects buyers here with ?sale=<purchase_id>. They type their
-// Discord username, we POST it to the VPS API, the bot grants their role.
-// Replaces the unreliable Gumroad custom-field flow (can't be made required).
+// Buyer goes here from a link in the Inner Circle product's Content tab on
+// Gumroad. They type their email + Discord username; we match the email
+// against our subscriber log and grant the role.
+//
+// Also supports a ?sale=<id> URL param (in case Trevor's Gumroad account
+// supports the post-purchase redirect template variable {{purchase_id}}).
+// If sale_id present, the email field is hidden — sale_id is more specific.
 
 "use client";
 
@@ -20,10 +24,10 @@ type ClaimState =
 function ClaimInner() {
   const params  = useSearchParams();
   const saleId  = params.get("sale") || "";
+  const [email,           setEmail]           = useState("");
   const [discordUsername, setDiscordUsername] = useState("");
   const [state, setState] = useState<ClaimState>({ kind: "idle" });
 
-  // Persist the sale_id so refreshing the page doesn't lose it
   useEffect(() => {
     if (saleId) {
       try { localStorage.setItem("ic_last_sale", saleId); } catch {}
@@ -36,20 +40,24 @@ function ClaimInner() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!effectiveSaleId) {
-      setState({ kind: "error", message: "Missing sale ID. Did you come from your Gumroad purchase confirmation?" });
-      return;
-    }
     if (!discordUsername.trim()) {
       setState({ kind: "error", message: "Type your Discord username first." });
       return;
     }
+    if (!effectiveSaleId && !email.trim()) {
+      setState({ kind: "error", message: "Enter the email you used at Gumroad checkout." });
+      return;
+    }
     setState({ kind: "submitting" });
     try {
+      const body: Record<string, string> = { discord_username: discordUsername.trim() };
+      if (effectiveSaleId) body.sale_id = effectiveSaleId;
+      else                 body.email   = email.trim();
+
       const r = await fetch(`${API_BASE}/inner-circle/claim`, {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ sale_id: effectiveSaleId, discord_username: discordUsername.trim() }),
+        body:    JSON.stringify(body),
       });
       const j = await r.json();
       if (!j.ok) {
@@ -104,6 +112,24 @@ function ClaimInner() {
           </div>
         ) : (
           <form onSubmit={submit} className="space-y-4">
+            {!effectiveSaleId && (
+              <div>
+                <label htmlFor="email" className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-white/60">
+                  Email you used at Gumroad checkout
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={state.kind === "submitting"}
+                  className="w-full rounded-lg border border-white/15 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400/30 disabled:opacity-50"
+                />
+              </div>
+            )}
+
             <div>
               <label htmlFor="discord" className="mb-2 block font-mono text-[10px] uppercase tracking-wider text-white/60">
                 Your Discord username
@@ -132,17 +158,11 @@ function ClaimInner() {
 
             <button
               type="submit"
-              disabled={state.kind === "submitting" || !effectiveSaleId}
+              disabled={state.kind === "submitting"}
               className="w-full rounded-lg border border-violet-300/60 bg-violet-400/20 px-4 py-3 text-sm font-semibold text-violet-100 transition-colors hover:bg-violet-400/35 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {state.kind === "submitting" ? "Linking…" : "Unlock Inner Circle"}
             </button>
-
-            {!effectiveSaleId && (
-              <p className="text-center text-[11px] text-amber-300/70">
-                ⚠ Missing sale ID in URL. Use the link from your Gumroad confirmation page.
-              </p>
-            )}
           </form>
         )}
 
