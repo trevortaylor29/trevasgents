@@ -33,11 +33,13 @@ export default function Page() {
 // Circle. The math is explicit at a glance.
 function CompareStrip() {
   const rows: { feature: string; inGuide: boolean }[] = [
-    { feature: "Current build guide",                inGuide: true  },
-    { feature: "Every future guide",                  inGuide: false },
+    { feature: "Initial setup — a few core agents",   inGuide: true  },
+    { feature: "Basic dashboard visuals",             inGuide: true  },
+    { feature: "In-depth builds — more agents, advanced visuals", inGuide: false },
+    { feature: "Every new guide as I publish",        inGuide: false },
     { feature: "New agent + revenue ideas, weekly",   inGuide: false },
     { feature: "Private Discord community",           inGuide: false },
-    { feature: "1-on-1 support",                      inGuide: false },
+    { feature: "Direct access to me · 1-on-1 support", inGuide: false },
     { feature: "Early access to new tools",           inGuide: false },
   ];
 
@@ -90,7 +92,7 @@ function CompareStrip() {
         ))}
 
         <div className="mt-4 text-center text-[11px] text-white/50">
-          Over <span className="font-semibold text-violet-200">6× the value</span> of the guide alone — for <span className="text-white/70">$5/mo more</span>.
+          The Build Guide gets you running. Inner Circle takes you deeper — for <span className="text-white/70">$5/mo more</span>.
         </div>
       </div>
     </motion.section>
@@ -188,10 +190,11 @@ function Hero() {
         transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
         className="mb-8 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
       >
-        The build guide gives you a proven model and the agent stack to run it —
-        whether you already have a business or you&apos;re starting from scratch.
-        Etsy, Fiverr, SaaS, YouTube, or your own idea — drop the guide into your
-        LLM and walk out with a working operation that runs while you sleep.
+        Pick your depth. The <span className="text-cyan-200">Build Guide</span> is
+        the initial setup — a few core agents, basic visuals, working operation.{" "}
+        <span className="text-violet-200">Inner Circle</span> is the in-depth
+        playbook — every guide, more agents, advanced builds, the private
+        community, and direct access to me as you scale.
       </motion.p>
 
       <motion.div
@@ -211,59 +214,44 @@ function Hero() {
 // ─── PRODUCT GRID ───────────────────────────────────────────────────────────
 function ProductGrid() {
   return (
-    <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="mb-20 grid gap-5 sm:grid-cols-3">
       <ProductCard
         accent="cyan"
-        eyebrow="One-time purchase"
+        eyebrow="One-time · initial setup"
         title="The Build Guide"
         price="$24.99"
         priceNote="one-time · yours forever"
         bullets={[
-          "Complete step-by-step setup guide",
-          "Tailors itself to YOUR business",
+          "Initial setup with a few core agents",
+          "Basic dashboard + visuals",
           "Day Zero walkthrough — works even if you've never built before",
+          "Tailors itself to YOUR business",
           "Note: Inner Circle includes this guide. Don't buy both.",
         ]}
-        cta="Start building"
+        cta="Get the build guide"
         href={LINKS.guide}
         delay={0}
       />
 
       <ProductCard
         accent="violet"
-        eyebrow="Best value · everything in the guide + more"
+        eyebrow="In-depth · everything else"
         title="Inner Circle"
         price="$29.99"
         priceNote="per month · cancel anytime"
         bullets={[
           "👉 Build Guide INCLUDED (no need to buy it separately)",
-          "ALL my guides — past, current, and future",
+          "In-depth builds — more agents, advanced visuals",
+          "Every new guide as I publish it",
           "Private Discord community access",
-          "1-on-1 support — get direct help from me",
-          "Early access to new agent ideas and tools",
+          "Direct access to me — 1-on-1 support",
+          "New agent ideas + revenue plays I don't post publicly",
+          "Early access to new tools + templates",
         ]}
-        cta="Get everything"
+        cta="Join Inner Circle"
         href={LINKS.membership}
         featured
         delay={0.05}
-      />
-
-      <ProductCard
-        accent="pink"
-        eyebrow="Coming soon"
-        title="Guide + Setup Call"
-        price="$99"
-        priceNote="launching shortly"
-        bullets={[
-          "Everything in the build guide",
-          "Live 30-minute setup call with me",
-          "I walk you through deployment",
-          "Personal stack review + first agent",
-        ]}
-        cta="Coming soon"
-        href={LINKS.bundle}
-        comingSoon
-        delay={0.1}
       />
 
       <ProductCard
@@ -280,7 +268,7 @@ function ProductGrid() {
         ]}
         cta="Open Discord"
         href={LINKS.discord}
-        delay={0.15}
+        delay={0.1}
       />
     </section>
   );
