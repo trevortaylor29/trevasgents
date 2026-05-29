@@ -189,11 +189,10 @@ function Hero() {
         transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
         className="mb-8 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
       >
-        Start with the <span className="text-cyan-200">Build Guide</span> to set up your
-        first AI agent ecosystem — Etsy, Fiverr, SaaS, YouTube, or your own idea.
-        Then go deeper inside <span className="text-violet-200">Inner Circle</span> —
-        every guide I write, the agent ideas I don&apos;t post publicly, and direct
-        access to me as you build.
+        The build guide gives you a proven model and the agent stack to run it —
+        whether you already have a business or you&apos;re starting from scratch.
+        Etsy, Fiverr, SaaS, YouTube, or your own idea — drop the guide into your
+        LLM and walk out with a working operation that runs while you sleep.
       </motion.p>
 
       <motion.div
@@ -205,8 +204,6 @@ function Hero() {
         <span>Proven models</span>
         <span className="text-pink-400/40">·</span>
         <span>Works at any level</span>
-        <span className="text-pink-400/40">·</span>
-        <span>Bring your own LLM</span>
       </motion.div>
     </section>
   );
