@@ -33,11 +33,12 @@ export default function Page() {
 // Circle. The math is explicit at a glance.
 function CompareStrip() {
   const rows: { feature: string; inGuide: boolean }[] = [
-    { feature: "Current build guide",                inGuide: true  },
-    { feature: "Every future guide",                  inGuide: false },
-    { feature: "New agent + revenue ideas, weekly",   inGuide: false },
+    { feature: "First AI agent ecosystem setup",      inGuide: true  },
+    { feature: "Every in-depth guide (past + future)", inGuide: false },
+    { feature: "Revenue plays I don't post publicly", inGuide: false },
+    { feature: "New agent ideas, weekly",             inGuide: false },
+    { feature: "Direct access to me",                 inGuide: false },
     { feature: "Private Discord community",           inGuide: false },
-    { feature: "1-on-1 support",                      inGuide: false },
     { feature: "Early access to new tools",           inGuide: false },
   ];
 
@@ -51,10 +52,10 @@ function CompareStrip() {
       <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-md sm:p-7">
         <div className="mb-5 text-center">
           <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-violet-300/70">
-            Which one?
+            Which tier?
           </div>
           <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-            Build Guide vs. Inner Circle
+            Start with the basics, or get everything
           </h2>
         </div>
 
@@ -176,7 +177,7 @@ function Hero() {
         transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
         className="mb-6 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
       >
-        Run an existing business — or build a new one —{" "}
+        Learn how to automate an existing business — or build a new one —{" "}
         <span className="animate-gradient-text">
           with AI agents.
         </span>
@@ -188,10 +189,11 @@ function Hero() {
         transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
         className="mb-8 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
       >
-        The build guide gives you a proven model and the agent stack to run it —
-        whether you already have a business or you&apos;re starting from scratch.
-        Etsy, Fiverr, SaaS, YouTube, or your own idea — drop the guide into your
-        LLM and walk out with a working operation that runs while you sleep.
+        Start with the <span className="text-cyan-200">Build Guide</span> to set up your
+        first AI agent ecosystem — Etsy, Fiverr, SaaS, YouTube, or your own idea.
+        Then go deeper inside <span className="text-violet-200">Inner Circle</span> —
+        every guide I write, the agent ideas I don&apos;t post publicly, and direct
+        access to me as you build.
       </motion.p>
 
       <motion.div
@@ -216,35 +218,37 @@ function ProductGrid() {
     <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       <ProductCard
         accent="cyan"
-        eyebrow="One-time purchase"
+        eyebrow="Starter · one-time"
         title="The Build Guide"
         price="$24.99"
         priceNote="one-time · yours forever"
         bullets={[
-          "Complete step-by-step setup guide",
-          "Tailors itself to YOUR business",
-          "Day Zero walkthrough — works even if you've never built before",
+          "Get your first AI agent ecosystem running",
+          "Day Zero walkthrough — built for first-timers",
+          "Tailors itself to YOUR business or idea",
+          "Drop it in your LLM and start today",
           "Note: Inner Circle includes this guide. Don't buy both.",
         ]}
-        cta="Start building"
+        cta="Start with the basics"
         href={LINKS.guide}
         delay={0}
       />
 
       <ProductCard
         accent="violet"
-        eyebrow="Best value · everything in the guide + more"
+        eyebrow="Where the real depth lives"
         title="Inner Circle"
         price="$29.99"
         priceNote="per month · cancel anytime"
         bullets={[
-          "👉 Build Guide INCLUDED (no need to buy it separately)",
-          "ALL my guides — past, current, and future",
-          "Private Discord community access",
-          "1-on-1 support — get direct help from me",
-          "Early access to new agent ideas and tools",
+          "👉 Build Guide INCLUDED — don't buy it separately",
+          "Every in-depth guide — past, current, and every new one",
+          "New agent ideas + revenue plays I don't post publicly",
+          "Direct access to me — ask questions, get unstuck",
+          "Private Discord community of builders",
+          "Early access to new agent templates + tools",
         ]}
-        cta="Get everything"
+        cta="Get the full picture"
         href={LINKS.membership}
         featured
         delay={0.05}
