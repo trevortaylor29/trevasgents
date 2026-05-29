@@ -33,12 +33,11 @@ export default function Page() {
 // Circle. The math is explicit at a glance.
 function CompareStrip() {
   const rows: { feature: string; inGuide: boolean }[] = [
-    { feature: "First AI agent ecosystem setup",      inGuide: true  },
-    { feature: "Every in-depth guide (past + future)", inGuide: false },
-    { feature: "Revenue plays I don't post publicly", inGuide: false },
-    { feature: "New agent ideas, weekly",             inGuide: false },
-    { feature: "Direct access to me",                 inGuide: false },
+    { feature: "Current build guide",                inGuide: true  },
+    { feature: "Every future guide",                  inGuide: false },
+    { feature: "New agent + revenue ideas, weekly",   inGuide: false },
     { feature: "Private Discord community",           inGuide: false },
+    { feature: "1-on-1 support",                      inGuide: false },
     { feature: "Early access to new tools",           inGuide: false },
   ];
 
@@ -52,10 +51,10 @@ function CompareStrip() {
       <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-md sm:p-7">
         <div className="mb-5 text-center">
           <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-violet-300/70">
-            Which tier?
+            Which one?
           </div>
           <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-            Start with the basics, or get everything
+            Build Guide vs. Inner Circle
           </h2>
         </div>
 
@@ -215,37 +214,35 @@ function ProductGrid() {
     <section className="mb-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       <ProductCard
         accent="cyan"
-        eyebrow="Starter · one-time"
+        eyebrow="One-time purchase"
         title="The Build Guide"
         price="$24.99"
         priceNote="one-time · yours forever"
         bullets={[
-          "Get your first AI agent ecosystem running",
-          "Day Zero walkthrough — built for first-timers",
-          "Tailors itself to YOUR business or idea",
-          "Drop it in your LLM and start today",
+          "Complete step-by-step setup guide",
+          "Tailors itself to YOUR business",
+          "Day Zero walkthrough — works even if you've never built before",
           "Note: Inner Circle includes this guide. Don't buy both.",
         ]}
-        cta="Start with the basics"
+        cta="Start building"
         href={LINKS.guide}
         delay={0}
       />
 
       <ProductCard
         accent="violet"
-        eyebrow="Where the real depth lives"
+        eyebrow="Best value · everything in the guide + more"
         title="Inner Circle"
         price="$29.99"
         priceNote="per month · cancel anytime"
         bullets={[
-          "👉 Build Guide INCLUDED — don't buy it separately",
-          "Every in-depth guide — past, current, and every new one",
-          "New agent ideas + revenue plays I don't post publicly",
-          "Direct access to me — ask questions, get unstuck",
-          "Private Discord community of builders",
-          "Early access to new agent templates + tools",
+          "👉 Build Guide INCLUDED (no need to buy it separately)",
+          "ALL my guides — past, current, and future",
+          "Private Discord community access",
+          "1-on-1 support — get direct help from me",
+          "Early access to new agent ideas and tools",
         ]}
-        cta="Get the full picture"
+        cta="Get everything"
         href={LINKS.membership}
         featured
         delay={0.05}
