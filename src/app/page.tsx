@@ -33,7 +33,7 @@ export default function Page() {
 // Circle. The math is explicit at a glance.
 function CompareStrip() {
   const rows: { feature: string; inGuide: boolean }[] = [
-    { feature: "Works for any business — Etsy, Fiverr, SaaS, trading, your own idea", inGuide: true },
+    { feature: "Works whether you're running a business or starting from scratch", inGuide: true },
     { feature: "Initial setup — a few core agents",   inGuide: true  },
     { feature: "Basic dashboard visuals",             inGuide: true  },
     { feature: "In-depth builds — more agents, advanced visuals", inGuide: false },
@@ -193,10 +193,11 @@ function Hero() {
       >
         Pick your depth. The <span className="text-cyan-200">Build Guide</span> is
         the initial setup — a few core agents, basic visuals, working operation.{" "}
-        <span className="text-violet-200">Inner Circle</span> is the in-depth
-        playbook — every guide, more agents, advanced builds, the private
-        community, and direct access to me as you scale. Works for whatever
-        you&apos;re running — Etsy, Fiverr, SaaS, YouTube, trading, or your own idea.
+        Join the <span className="text-violet-200">Inner Circle</span> for the
+        in-depth playbook — every guide, more agents, advanced builds, the
+        private community, and direct access to me as you scale. Whether you
+        already run Etsy, Fiverr, SaaS, YouTube, or trading — or you&apos;re
+        starting from scratch — I&apos;ll show you how to set it up.
       </motion.p>
 
       <motion.div
