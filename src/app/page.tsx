@@ -191,13 +191,13 @@ function Hero() {
         transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
         className="mb-8 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
       >
-        Pick your depth. The <span className="text-cyan-200">Build Guide</span> is
-        the initial setup — a few core agents, basic visuals, working operation.{" "}
         Join the <span className="text-violet-200">Inner Circle</span> for the
         in-depth playbook — every guide, more agents, advanced builds, the
-        private community, and direct access to me as you scale. Whether you
-        already run Etsy, Fiverr, SaaS, YouTube, or trading — or you&apos;re
-        starting from scratch — I&apos;ll show you how to set it up.
+        private community, and direct access to me as you scale. Or get the{" "}
+        <span className="text-cyan-200">Build Guide</span> for the basic setup —
+        a few core agents, basic visuals, working operation. Whether you already
+        run Etsy, Fiverr, SaaS, YouTube, or trading — or you&apos;re starting
+        from scratch — I&apos;ll show you how to set it up.
       </motion.p>
 
       <motion.div
