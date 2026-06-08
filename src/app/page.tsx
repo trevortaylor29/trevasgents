@@ -170,7 +170,7 @@ function Hero() {
         className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-50 backdrop-blur-sm"
       >
         <span aria-hidden="true">🔥</span>
-        <span>40+ builders already inside</span>
+        <span>115+ builders already inside</span>
       </motion.div>
 
       <motion.h1
