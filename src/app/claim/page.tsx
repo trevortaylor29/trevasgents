@@ -20,8 +20,14 @@ type ClaimState =
   | { kind: "error"; message: string };
 
 function ClaimInner() {
-  const params  = useSearchParams();
-  const saleId  = params.get("sale") || "";  // only honored if present in current URL
+  const params = useSearchParams();
+  // Reject literal Gumroad template placeholders — if Gumroad didn't substitute
+  // {{purchase_id}} for any reason, the URL has `?sale={{purchase_id}}` (literal).
+  // Treat that as "no sale_id" so the email field stays visible and the buyer
+  // can complete the claim with their email instead of hitting a 404.
+  const rawSale = params.get("sale") || "";
+  const looksLikeTemplate = /\{\{|\}\}|^purchase_id$/i.test(rawSale);
+  const saleId = looksLikeTemplate ? "" : rawSale;
   const [email,           setEmail]           = useState("");
   const [discordUsername, setDiscordUsername] = useState("");
   const [state, setState] = useState<ClaimState>({ kind: "idle" });
@@ -32,15 +38,18 @@ function ClaimInner() {
       setState({ kind: "error", message: "Type your Discord username first." });
       return;
     }
+    // If we don't have a usable sale_id, require email
     if (!saleId && !email.trim()) {
       setState({ kind: "error", message: "Enter the email you used at Gumroad checkout." });
       return;
     }
     setState({ kind: "submitting" });
     try {
+      // Always send email if the buyer typed one — backend uses it as fallback
+      // when sale_id lookup misses (stale links, mid-flight migrations, etc).
       const body: Record<string, string> = { discord_username: discordUsername.trim() };
-      if (saleId) body.sale_id = saleId;
-      else        body.email   = email.trim();
+      if (saleId)         body.sale_id = saleId;
+      if (email.trim())   body.email   = email.trim();
 
       // Same-origin proxy → VPS (avoids HTTPS-to-HTTP mixed-content block)
       const r = await fetch("/api/claim", {
