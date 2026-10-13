@@ -269,37 +269,30 @@ function ProductGrid() {
 // ─── LIFETIME OFFER ─────────────────────────────────────────────────────────
 // Every number here is live and true: the seat cap and end date are set on the server, "seats left" is cap minus the
 // product's real Gumroad sales count, and the card only renders once the product exists (2026-10-13).
-type Lifetime = { available: boolean; ended?: boolean; days_left?: number; url?: string; price?: string; sold?: number; cap?: number; left?: number; later_price?: string };
+type Lifetime = { available: boolean; url?: string; price?: string; sold?: number; cap?: number; left?: number; later_price?: string };
 function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
+  // Static urgency copy by Trevor's call (2026-10-13): no countdown, nothing closes on its own. Seats left is the real
+  // Gumroad count while it is positive; the server omits it once the cap is reached.
   const left = typeof lt.left === "number" ? lt.left : null;
-  const days = typeof lt.days_left === "number" ? lt.days_left : null;
-  const over = !!lt.ended || (left !== null && left <= 0);
-  // deliberately vague about WHEN, exact about HOW MANY: the server owns the real date and flips `ended` on its own
-  const when = days === null ? "for a limited time" : days <= 1 ? "ends today" : days <= 3 ? "ends in a couple of days" : days <= 9 ? "about a week left" : "for a limited time";
   const priceNum = (lt.price || "$99").replace(/[^0-9.]/g, "");
   return (
     <ProductCard
       accent="pink"
-      eyebrow={over ? "Founding offer closed" : `Founding offer · ${when}${left !== null ? ` · ${left} of ${lt.cap} seats left` : ""}`}
+      eyebrow={`Founding offer · limited time${left !== null ? ` · ${left} of ${lt.cap} seats left` : ""}`}
       title="Inner Circle — Lifetime"
-      price={over ? `$${lt.later_price}` : (lt.price || "$99")}
-      priceNote={over ? "one payment, forever" : `one payment, forever · founding price, then $${lt.later_price}`}
-      bullets={over ? [
-        "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
-        "No monthly charge, ever",
-        "The founding price has ended",
-      ] : [
+      price={lt.price || "$99"}
+      priceNote={`one payment, forever · founding price, then $${lt.later_price}`}
+      bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `Founding price $${priceNum} ${when}, then it is $${lt.later_price}`,
+        `Founding price $${priceNum} for about a week, then it is $${lt.later_price}`,
         `${lt.cap} founding seats${left !== null ? `, ${left} still open` : ""}. When they are gone, they are gone`,
       ]}
-      cta={over ? "Founding offer closed" : "Take a founding seat"}
-      href={over ? LINKS.membership : lt.url}
-      comingSoon={over}
+      cta="Take a founding seat"
+      href={lt.url}
       delay={0.05}
     />
   );
