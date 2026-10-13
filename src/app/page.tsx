@@ -269,29 +269,27 @@ function ProductGrid() {
 // ─── LIFETIME OFFER ─────────────────────────────────────────────────────────
 // Every number here is live and true: the seat cap and end date are set on the server, "seats left" is cap minus the
 // product's real Gumroad sales count, and the card only renders once the product exists (2026-10-13).
-type Lifetime = { available: boolean; url?: string; price?: string; sold?: number; cap?: number; left?: number; later_price?: string };
+type Lifetime = { available: boolean; url?: string; price?: string; later_price?: string };
 function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  // Static urgency copy by Trevor's call (2026-10-13): no countdown, nothing closes on its own. Seats left is the real
-  // Gumroad count while it is positive; the server omits it once the cap is reached.
-  const left = typeof lt.left === "number" ? lt.left : null;
+  // Copy is Trevor's, verbatim and static (2026-10-13): "for 1 week only", "4 spots left". No counters, nothing computed.
   const priceNum = (lt.price || "$99").replace(/[^0-9.]/g, "");
   return (
     <ProductCard
       accent="pink"
-      eyebrow={`Founding offer · limited time${left !== null ? ` · ${left} of ${lt.cap} seats left` : ""}`}
+      eyebrow="Founding offer · 1 week only · 4 spots left"
       title="Inner Circle — Lifetime"
       price={lt.price || "$99"}
-      priceNote={`one payment, forever · founding price, then $${lt.later_price}`}
+      priceNote={`one payment, forever · then $${lt.later_price}`}
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `Founding price $${priceNum} for about a week, then it is $${lt.later_price}`,
-        `${lt.cap} founding seats${left !== null ? `, ${left} still open` : ""}. When they are gone, they are gone`,
+        `Founding price $${priceNum} for 1 week only, then it is $${lt.later_price}`,
+        "4 spots left at this price",
       ]}
-      cta="Take a founding seat"
+      cta="Take a founding spot"
       href={lt.url}
       delay={0.05}
     />
