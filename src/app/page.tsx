@@ -278,7 +278,7 @@ function LifetimeCard() {
   return (
     <ProductCard
       accent="pink"
-      eyebrow="Founding offer · pay once, in for life"
+      eyebrow="Lifetime deal · pay once, in for life"
       banner="⏳ Offer ends in 1 week · 4 spots left"
       featured
       tag="Most Popular"
@@ -288,10 +288,10 @@ function LifetimeCard() {
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `This $${priceNum} founding price is only available for 1 week. After that, lifetime access is $${lt.later_price}`,
-        "4 spots left at the founding price",
+        `This $${priceNum} price is only available for 1 week. After that, lifetime access is $${lt.later_price}`,
+        "4 spots left at this price",
       ]}
-      cta="Take a founding spot"
+      cta="Get lifetime access"
       href={lt.url}
       delay={0.05}
     />
