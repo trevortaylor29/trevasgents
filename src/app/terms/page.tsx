@@ -26,7 +26,7 @@ export default function TermsPage() {
       <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6">
         <p className="text-[15px] leading-relaxed">
           Inner Circle auto-renews monthly at $49 for members who joined on or after October 13, 2026 (earlier members keep the price they joined at), cancel anytime in your
-          Gumroad library. Inner Circle Lifetime is a single payment for permanent access. All sales final — no refunds on recurring charges or
+          Gumroad library. Inner Circle Lifetime is a single payment for access for as long as the Inner Circle runs (see &quot;Lifetime access&quot; below). All sales final — no refunds on recurring charges or
           one-time purchases.
         </p>
       </section>
@@ -54,6 +54,22 @@ export default function TermsPage() {
           access is granted immediately upon purchase, all sales are final. This
           includes one-time guide purchases and all recurring Inner Circle
           subscription charges.
+        </p>
+
+        <h2 className="text-lg font-semibold text-white/90">Lifetime access</h2>
+        <p>
+          &quot;Lifetime&quot; means the lifetime of the Inner Circle, not yours: a Lifetime
+          purchase gives you everything a monthly member gets, with no further charges,
+          for as long as the Inner Circle operates. It is not a guarantee that the Inner
+          Circle will run for any particular length of time, and the content, agents,
+          tools and community may change over that time.
+        </p>
+        <p>
+          If the Inner Circle is ever discontinued, Lifetime members get at least 30
+          days&apos; notice and a downloadable copy of the guides and templates that exist
+          at that time, so what you paid for stays yours. Because access is delivered in
+          full from day one, no refund is owed on discontinuation. Lifetime access is
+          personal to the buyer and cannot be transferred or resold.
         </p>
 
         <h2 className="text-lg font-semibold text-white/90">Auto-renewal</h2>
