@@ -284,11 +284,12 @@ function LifetimeCard() {
       tag="Most Popular"
       title="Inner Circle — Lifetime"
       price={lt.price || "$99"}
+      was={`$${lt.later_price}`}
       priceNote="one payment · yours forever"
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `This $${priceNum} price is only available for 1 week. After that, lifetime access is $${lt.later_price}`,
+        `This $${priceNum} price is only available for 1 week, then lifetime access goes back to $${lt.later_price}`,
         "4 spots left at this price",
       ]}
       cta="Get lifetime access"
@@ -332,7 +333,7 @@ const ACCENT: Record<Accent, { border: string; text: string; ring: string; glow:
 };
 
 function ProductCard({
-  accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, comingSoon, delay = 0, tag, banner,
+  accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, comingSoon, delay = 0, tag, banner, was,
 }: {
   accent: Accent;
   eyebrow: string;
@@ -347,6 +348,7 @@ function ProductCard({
   delay?: number;
   tag?: string;     // text of the floating badge (default "Most Popular")
   banner?: string;  // loud limited-time bar at the top of the card
+  was?: string;     // struck-through price shown beside the live one
 }) {
   const c = ACCENT[accent];
   return (
@@ -395,7 +397,10 @@ function ProductCard({
       <h3 className={`mb-4 text-lg font-semibold tracking-tight ${c.text}`}>{title}</h3>
 
       <div className="mb-5">
-        <div className={`text-3xl font-bold ${c.text}`}>{price}</div>
+        <div className="flex items-baseline gap-3">
+          <div className={`text-3xl font-bold ${c.text}`}>{price}</div>
+          {was && <div className="text-2xl font-semibold text-white/35 line-through decoration-pink-400/70 decoration-[3px]">{was}</div>}
+        </div>
         <div className="font-mono text-[10px] uppercase tracking-wider text-white/40">{priceNote}</div>
       </div>
 
