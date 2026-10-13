@@ -5,22 +5,24 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { Testimonials } from "@/components/Testimonials";
 
 // ─── CONFIG — replace these URLs once products are created ──────────────────
 const LINKS = {
-  guide:      "https://trevsagents.gumroad.com/l/tonkas-dungeon-build-guide",
-  bundle:     "https://trevsagents.gumroad.com/l/REPLACE-ME-bundle",       // $100 guide + 30min call
-  membership: "https://trevsagents.gumroad.com/l/innercircle", // $34.99/mo
+  membership: "https://trevsagents.gumroad.com/l/innercircle", // Inner Circle ($49/mo for new members since 2026-10-13; earlier members keep $29.99)
   discord:    "https://discord.gg/5BfG5Wuwfr",                              // permanent invite to Trevs Agents server (never-expires)
-  tiktok:     "https://www.tiktok.com/@REPLACE-ME",
-  twitter:    "https://x.com/REPLACE-ME",
+  tiktok:     "https://www.tiktok.com/@tonkashops",
+  twitter:    "https://x.com/trevsagents",
 } as const;
 
 export default function Page() {
   return (
     <main className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-8 sm:px-8 sm:py-12">
+      {/* Funnel order: hero → what you get (checkmarks) → proof → the offer/pricing. */}
       <Hero />
       <CompareStrip />
+      <Testimonials />
       <ProductGrid />
       <Footer />
     </main>
@@ -31,69 +33,82 @@ export default function Page() {
 // Forces the value comparison BEFORE visitors click a card. Without this,
 // most TikTok visitors impulse-click the cheaper guide and never see Inner
 // Circle. The math is explicit at a glance.
+// Fast, eased scroll to a target — fixed ~850ms regardless of distance, so it
+// visibly *whooshes past* the testimonials (you see they exist) instead of an
+// instant 1-frame jump that hides them entirely.
+function whooshTo(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const startY = window.scrollY;
+  const dur = 850;
+  let start: number | null = null;
+  const step = (ts: number) => {
+    if (start === null) start = ts;
+    const t = Math.min(1, (ts - start) / dur);
+    const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // easeInOutQuad
+    // Recompute the target EVERY frame — lazy-loaded testimonial images shift the
+    // page height mid-scroll, so a target computed once goes stale and lands short.
+    const targetY = el.getBoundingClientRect().top + window.scrollY - 24;
+    window.scrollTo(0, startY + (targetY - startY) * ease);
+    if (t < 1) requestAnimationFrame(step);
+    else el.scrollIntoView({ block: "start", behavior: "auto" }); // final snap
+  };
+  requestAnimationFrame(step);
+}
+
 function CompareStrip() {
-  const rows: { feature: string; inGuide: boolean }[] = [
-    { feature: "Works whether you're running a business or starting from scratch", inGuide: true },
-    { feature: "Initial setup — a few core agents",   inGuide: true  },
-    { feature: "Basic dashboard visuals",             inGuide: true  },
-    { feature: "In-depth builds — more agents, advanced visuals", inGuide: false },
-    { feature: "Every new guide as I publish",        inGuide: false },
-    { feature: "New agent + revenue ideas, weekly",   inGuide: false },
-    { feature: "Private Discord community",           inGuide: false },
-    { feature: "Direct access to me · 1-on-1 support", inGuide: false },
-    { feature: "Early access to new tools",           inGuide: false },
+  const features: string[] = [
+    "The Agent Builder does the building FOR you — no code, no figuring it out alone. Tell it what you want to run and it sets it up on your machine while you watch, with an AI copilot answering anything you get stuck on",
+    "A library of 14 proven money-making agents — add as many as you like: stores, content, research, trading & more (new ones dropped weekly)",
+    "Guided ecosystem setup + your own live mission-control dashboard — the builder helps you make both",
+    "A step-by-step road to profit — the exact path from zero to your first dollar",
+    "New money-making agents + revenue plays dropped every week (never posted publicly)",
+    "Every guide I publish — updated the moment the AI tools change",
+    "A private community of 2,000+ builders shipping real results",
+    "Direct access to me — 1-on-1 help the second you get stuck",
+    "Works whether you're starting from scratch or scaling what you've already got",
   ];
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
-      className="mx-auto mb-10 w-full max-w-2xl sm:mb-14"
+      transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+      className="mx-auto mb-12 w-full max-w-2xl sm:mb-16"
     >
-      <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-md sm:p-7">
-        <div className="mb-5 text-center">
+      <div className="rounded-2xl border border-violet-400/20 bg-white/[0.025] p-6 backdrop-blur-md sm:p-8">
+        <div className="mb-6 text-center">
           <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.3em] text-violet-300/70">
-            Which one?
+            What you get
           </div>
-          <h2 className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-            Build Guide vs. Inner Circle
+          <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Everything inside the <span className="animate-gradient-text">Inner Circle</span>
           </h2>
+          <p className="mx-auto mt-2 max-w-md text-[13px] leading-relaxed text-white/50">
+            The whole operation, the agents, and the exact road to your first dollar — for less than one hour of a freelancer a month.
+          </p>
         </div>
 
-        {/* Column headers */}
-        <div className="grid grid-cols-[1.6fr_0.7fr_0.7fr] items-end gap-2 border-b border-white/10 pb-3 sm:gap-4">
-          <div />
-          <div className="text-center">
-            <div className="text-xs font-semibold text-cyan-200 sm:text-sm">Build Guide</div>
-            <div className="font-mono text-[10px] text-white/50">$24.99 once</div>
-          </div>
-          <div className="text-center">
-            <div className="text-xs font-semibold text-violet-200 sm:text-sm">Inner Circle</div>
-            <div className="font-mono text-[10px] text-white/50">$29.99/mo</div>
-          </div>
+        <div className="grid gap-x-6 gap-y-3.5 sm:grid-cols-2">
+          {features.map((feature) => (
+            <div key={feature} className="flex items-start gap-3">
+              <span className="mt-0.5 shrink-0"><Check /></span>
+              <span className="text-[13.5px] leading-snug text-white/80 sm:text-sm">{feature}</span>
+            </div>
+          ))}
         </div>
 
-        {/* Feature rows */}
-        {rows.map((row, i) => (
-          <div
-            key={row.feature}
-            className={`grid grid-cols-[1.6fr_0.7fr_0.7fr] items-center gap-2 py-2.5 text-[13px] sm:gap-4 sm:text-sm ${
-              i < rows.length - 1 ? "border-b border-white/5" : ""
-            }`}
+        {/* Skip-to-pricing CTA — whooshes past the testimonials (obvious they're there) */}
+        <div className="mt-7 flex flex-col items-center gap-2 border-t border-white/8 pt-6">
+          <button
+            onClick={() => whooshTo("pricing")}
+            className="rounded-lg border border-violet-300/70 bg-violet-400/20 px-6 py-3 text-sm font-semibold text-violet-50 transition-colors hover:bg-violet-400/35"
           >
-            <div className="leading-snug text-white/80">{row.feature}</div>
-            <div className="flex justify-center">
-              {row.inGuide ? <Check /> : <Dash />}
-            </div>
-            <div className="flex justify-center">
-              <Check />
-            </div>
-          </div>
-        ))}
-
-        <div className="mt-4 text-center text-[11px] text-white/50">
-          The Build Guide gets you running. Inner Circle takes you deeper — for <span className="text-white/70">$5/mo more</span>.
+            Ready to join? Jump to pricing ↓
+          </button>
+          <span className="text-[11.5px] text-white/40">
+            You&apos;ll scroll past what 2,000+ members are saying — worth a peek on the way.
+          </span>
         </div>
       </div>
     </motion.section>
@@ -111,14 +126,6 @@ function Check() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-function Dash() {
-  return (
-    <svg viewBox="0 0 20 20" className="size-4 text-white/25 sm:size-5" aria-hidden="true">
-      <path d="M4 10h12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -170,7 +177,7 @@ function Hero() {
         className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-50 backdrop-blur-sm"
       >
         <span aria-hidden="true">🔥</span>
-        <span>850+ builders already inside</span>
+        <span>2,000+ builders already inside</span>
       </motion.div>
 
       <motion.h1
@@ -191,13 +198,12 @@ function Hero() {
         transition={{ delay: 0.25, duration: 0.6, ease: "easeOut" }}
         className="mb-8 max-w-2xl text-base leading-relaxed text-white/75 sm:text-lg"
       >
-        Join the <span className="text-violet-200">Inner Circle</span> for the
-        in-depth playbook — every guide, more agents, advanced builds, the
-        private community, and direct access to me as you scale. Or get the{" "}
-        <span className="text-cyan-200">Build Guide</span> for the basic setup —
-        a few core agents, basic visuals, working operation. Whether you already
-        run Etsy, Fiverr, SaaS, YouTube, or trading — or you&apos;re starting
-        from scratch — I&apos;ll show you how to set it up.
+        Join the <span className="text-violet-200">Inner Circle</span> and get the
+        full playbook — the <span className="text-violet-200">Agent Builder</span> that stands up your whole
+        AI-agent operation on your machine: it walks you through the foundation, lets you add as many proven
+        agents as you want from the library, and builds you a dashboard to run it all (no code, AI copilot
+        guiding you). Plus every guide, the private community, and direct access to me. Point it at the
+        business you already run — Etsy, Fiverr, SaaS, YouTube, trading — or start a fresh one this weekend.
       </motion.p>
 
       <motion.div
@@ -217,45 +223,27 @@ function Hero() {
 // ─── PRODUCT GRID ───────────────────────────────────────────────────────────
 function ProductGrid() {
   return (
-    <section className="mb-20 grid gap-5 sm:grid-cols-3">
-      <ProductCard
-        accent="cyan"
-        eyebrow="One-time · initial setup"
-        title="The Build Guide"
-        price="$24.99"
-        priceNote="one-time · yours forever"
-        bullets={[
-          "Initial setup with a few core agents",
-          "Basic dashboard + visuals",
-          "Day Zero walkthrough — works even if you've never built before",
-          "Tailors itself to YOUR business",
-          "Note: Inner Circle includes this guide. Don't buy both.",
-        ]}
-        cta="Get the build guide"
-        href={LINKS.guide}
-        delay={0}
-      />
-
+    <section id="pricing" className="mb-20 grid scroll-mt-6 gap-5 sm:grid-cols-3">
       <ProductCard
         accent="violet"
-        eyebrow="In-depth · everything else"
+        eyebrow="The playbook · everything"
         title="Inner Circle"
-        price="$29.99"
+        price="$49"
         priceNote="per month · cancel anytime"
         bullets={[
-          "👉 Build Guide INCLUDED (no need to buy it separately)",
-          "In-depth builds — more agents, advanced visuals",
-          "Every new guide as I publish it",
-          "Private Discord community access",
-          "Direct access to me — 1-on-1 support",
-          "New agent ideas + revenue plays I don't post publicly",
-          "Early access to new tools + templates",
+          "The Agent Builder — stand up your whole AI-agent operation on your machine, no code, AI copilot included",
+          "A library of 14 proven agents — add as many as you want (new ones weekly)",
+          "Guided ecosystem setup + your own live mission-control dashboard",
+          "A step-by-step road to profit — zero to your first dollar",
+          "Private community of 2,000+ + direct 1-on-1 access to me",
         ]}
         cta="Join Inner Circle"
         href={LINKS.membership}
         featured
-        delay={0.05}
+        delay={0}
       />
+
+      <LifetimeCard />
 
       <ProductCard
         accent="amber"
@@ -264,7 +252,7 @@ function ProductGrid() {
         price="Free"
         priceNote="open to all"
         bullets={[
-          "Chat with other builders",
+          "Chat with 2,000+ other builders",
           "Ask questions, share what you're building",
           "Learn from real teardowns + agent setups",
           "No payment required to join",
@@ -274,6 +262,39 @@ function ProductGrid() {
         delay={0.1}
       />
     </section>
+  );
+}
+
+
+// ─── LIFETIME OFFER ─────────────────────────────────────────────────────────
+// Every number here is live and true: the seat cap and end date are set on the server, "seats left" is cap minus the
+// product's real Gumroad sales count, and the card only renders once the product exists (2026-10-13).
+type Lifetime = { available: boolean; url?: string; price?: string; sold?: number; cap?: number; left?: number; until?: string; later_price?: string };
+function LifetimeCard() {
+  const [lt, setLt] = useState<Lifetime | null>(null);
+  useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
+  if (!lt || !lt.available || !lt.url) return null;
+  const until = lt.until ? new Date(lt.until + "T00:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric" }) : "";
+  const left = typeof lt.left === "number" ? lt.left : null;
+  const soldOut = left !== null && left <= 0;
+  return (
+    <ProductCard
+      accent="pink"
+      eyebrow={soldOut ? "Founding seats taken" : `Founding offer · ${left !== null ? `${left} of ${lt.cap} seats left` : "limited seats"}`}
+      title="Inner Circle — Lifetime"
+      price={lt.price || "$99"}
+      priceNote={soldOut ? `the founding price is gone · $${lt.later_price} lifetime` : `one payment, forever · until ${until}, then $${lt.later_price}`}
+      bullets={[
+        "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
+        "No monthly charge, ever. Pays for itself in two months against $49 a month",
+        `Founding price $${(lt.price || "$99").replace(/[^0-9.]/g, "")} until ${until}. After that it is $${lt.later_price}`,
+        `${lt.cap} founding seats${left !== null ? `, ${left} still open` : ""}. When they are gone, they are gone`,
+      ]}
+      cta={soldOut ? "Founding seats are gone" : "Take a founding seat"}
+      href={lt.url}
+      comingSoon={soldOut}
+      delay={0.05}
+    />
   );
 }
 
@@ -406,6 +427,8 @@ function Footer() {
         <a href={LINKS.twitter} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-cyan-300">X / Twitter</a>
         <span className="text-pink-400/40">·</span>
         <a href={LINKS.discord} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-violet-300">Discord</a>
+        <span className="text-pink-400/40">·</span>
+        <a href="/terms" className="transition-colors hover:text-white/80">Terms</a>
       </div>
       <div className="font-mono text-[10px] text-white/30">© 2026 Trevs Agents</div>
     </footer>
