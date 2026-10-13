@@ -239,7 +239,6 @@ function ProductGrid() {
         ]}
         cta="Join Inner Circle"
         href={LINKS.membership}
-        featured
         delay={0}
       />
 
@@ -279,7 +278,10 @@ function LifetimeCard() {
   return (
     <ProductCard
       accent="pink"
-      eyebrow="Founding offer · 1 week only · 4 spots left"
+      eyebrow="Founding offer · one payment, in for good"
+      banner="⏳ 1 week only · 4 spots left"
+      featured
+      tag="Most Popular · Best Value"
       title="Inner Circle — Lifetime"
       price={lt.price || "$99"}
       priceNote={`one payment, forever · then $${lt.later_price}`}
@@ -330,7 +332,7 @@ const ACCENT: Record<Accent, { border: string; text: string; ring: string; glow:
 };
 
 function ProductCard({
-  accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, comingSoon, delay = 0,
+  accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, comingSoon, delay = 0, tag, banner,
 }: {
   accent: Accent;
   eyebrow: string;
@@ -343,6 +345,8 @@ function ProductCard({
   featured?: boolean;
   comingSoon?: boolean;
   delay?: number;
+  tag?: string;     // text of the floating badge (default "Most Popular")
+  banner?: string;  // loud limited-time bar at the top of the card
 }) {
   const c = ACCENT[accent];
   return (
@@ -369,8 +373,19 @@ function ProductCard({
     >
       {featured && (
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 rounded-full bg-gradient-to-r from-pink-400 via-violet-400 to-cyan-400 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-black shadow-[0_0_22px_rgba(167,139,250,0.7)]">
-          🔥 Most Popular
+          🔥 {tag || "Most Popular"}
         </div>
+      )}
+
+      {banner && (
+        // The "whoa, I need to get in on that" bar (Trevor 2026-10-13): big, hot, and breathing — never gated on reduced motion.
+        <motion.div
+          animate={{ scale: [1, 1.035, 1] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="mb-4 mt-2 rounded-lg bg-gradient-to-r from-red-500 via-pink-500 to-orange-400 px-3 py-2.5 text-center font-mono text-[13px] font-black uppercase tracking-[0.14em] text-white shadow-[0_0_30px_rgba(244,63,94,0.55)] sm:text-sm"
+        >
+          {banner}
+        </motion.div>
       )}
 
       <div className={`mb-2 font-mono text-[9px] uppercase tracking-[0.3em] ${c.text} opacity-70`}>
