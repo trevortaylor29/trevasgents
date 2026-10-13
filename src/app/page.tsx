@@ -281,7 +281,7 @@ function LifetimeCard() {
       eyebrow="Founding offer · one payment, in for good"
       banner="⏳ 1 week only · 4 spots left"
       featured
-      tag="Most Popular · Best Value"
+      tag="Most Popular"
       title="Inner Circle — Lifetime"
       price={lt.price || "$99"}
       priceNote={`one payment, forever · then $${lt.later_price}`}
@@ -382,7 +382,7 @@ function ProductCard({
         <motion.div
           animate={{ scale: [1, 1.035, 1] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          className="mb-4 mt-2 rounded-lg bg-gradient-to-r from-red-500 via-pink-500 to-orange-400 px-3 py-2.5 text-center font-mono text-[13px] font-black uppercase tracking-[0.14em] text-white shadow-[0_0_30px_rgba(244,63,94,0.55)] sm:text-sm"
+          className="mb-4 mt-3 rounded-lg bg-gradient-to-r from-red-500 via-pink-500 to-orange-400 px-3 py-2.5 text-center font-mono text-[12px] font-black uppercase leading-snug tracking-[0.1em] text-white shadow-[0_0_30px_rgba(244,63,94,0.55)] sm:text-[13px]"
         >
           {banner}
         </motion.div>
