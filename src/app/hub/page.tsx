@@ -81,7 +81,7 @@ export default function HubPage() {
     try {
       const { status, json } = await hub<Overview>(s, "/ui/overview");
       if (status === 401) { setErr("signin"); return; }
-      if (status === 403) { setErr("membership"); return; }
+      if (status === 403) { setErr(json.error === "preview" ? "preview" : "membership"); return; }
       if (!json.ok) { setErr(json.error || "hub error"); return; }
       setErr(null); setData(json); setNow(Date.now());
     } catch { setErr("The hub is not answering right now. Your data is safe. Try again in a minute."); }
@@ -97,6 +97,7 @@ export default function HubPage() {
   if (session === undefined) return <div className="min-h-screen" />;
   if (!session || err === "signin") return <Gate reason="signin" />;
   if (err === "membership") return <Gate reason="membership" />;
+  if (err === "preview") return <Gate reason="preview" />;
 
   const go = (v: View) => { setView(v); setFocus(null); window.scrollTo({ top: 0 }); };
   const focused = focus && data ? data.agents.find((a) => a.slug === focus) || null : null;
@@ -178,7 +179,16 @@ function TopBar({ view, onView, session, pending, data }: { view: View; onView: 
     </header>
   );
 }
-function Gate({ reason }: { reason: "signin" | "membership" }) {
+function Gate({ reason }: { reason: "signin" | "membership" | "preview" }) {
+  if (reason === "preview") return (
+    <main className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-6 text-center">
+      <Glow />
+      <div className="mb-8"><Wordmark /></div>
+      <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-white">Still being built</h1>
+      <p className="mb-7 text-[15px] leading-relaxed text-white/60">The hub opens to Inner Circle members soon. Nothing to do yet.</p>
+      <a href="/builder" className="rounded-xl bg-white px-6 py-3 text-sm font-extrabold text-black shadow-[0_10px_40px_rgba(167,139,250,0.35)]">Back to the builder</a>
+    </main>
+  );
   return (
     <main className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-6 text-center">
       <Glow />

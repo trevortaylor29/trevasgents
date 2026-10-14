@@ -545,6 +545,8 @@ export default function BuilderPage() {
   );
 }
 
+// The hub is still being built (2026-10-14): only these accounts see the link. The hub service refuses everyone else too.
+const HUB_PREVIEW_EMAILS = new Set(["trevor77077@gmail.com"]);
 // ─── sidebar (desktop) / top nav (mobile) — the app chrome ───────────────────
 const NAV: { id: Tab; label: string; icon: string }[] = [
   { id: "home", label: "Home", icon: "🏠" },
@@ -592,6 +594,7 @@ function Sidebar({
               {n.label}
             </button>
           ))}
+          {HUB_PREVIEW_EMAILS.has(account.email.toLowerCase()) && (
           <a
             href="/hub"
             className="mt-2 flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium text-white/50 transition-colors hover:bg-white/[0.04] hover:text-white/90"
@@ -599,8 +602,9 @@ function Sidebar({
           >
             <span className="text-base">🛰️</span>
             Hub
-            <span className="ml-auto rounded-md border border-violet-300/30 bg-violet-400/10 px-1.5 py-0.5 text-[10px] font-semibold tracking-[0.12em] text-violet-200">NEW</span>
+            <span className="ml-auto rounded-md border border-violet-300/30 bg-violet-400/10 px-1.5 py-0.5 text-[10px] font-semibold tracking-[0.12em] text-violet-200">PREVIEW</span>
           </a>
+          )}
         </nav>
         <div className="mt-4 rounded-xl border border-white/8 bg-black/30 p-3">
           <div className="truncate text-xs font-medium text-white/70" title={account.email}>
@@ -662,10 +666,12 @@ function Sidebar({
               {n.label}
             </button>
           ))}
+          {HUB_PREVIEW_EMAILS.has(account.email.toLowerCase()) && (
           <a href="/hub" className="flex shrink-0 items-center gap-1.5 rounded-full border border-violet-300/30 bg-violet-400/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-100">
             <span>🛰️</span>
             Hub
           </a>
+          )}
         </nav>
       </header>
     </>
