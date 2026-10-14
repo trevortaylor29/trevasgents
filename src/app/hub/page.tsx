@@ -343,6 +343,14 @@ function Home({ data, now, session, go, onOpen, onChanged }: { data: Overview; n
         </div>
 
         <section className="mt-10">
+          <h2 className="mb-3 text-[15px] font-bold text-white">Connect your Claude Code</h2>
+          <Card tone="violet" className="p-5">
+            <p className="text-[13.5px] leading-relaxed text-white/65">One command, once, on the machine where your agents run. Every agent you build then has the Trevs tools: video research, problem finds, vetted ideas, the agent library, ask-before-acting approvals and run reporting. They answer only while your membership is active.</p>
+            <ConnectCommand session={session} />
+          </Card>
+        </section>
+
+        <section className="mt-8">
           <div className="mb-3 flex items-baseline justify-between"><h2 className="text-[15px] font-bold text-white">Needs your yes</h2>{pending.length > 0 && <button onClick={() => go("approvals")} className="text-[12px] font-semibold text-amber-200">{pending.length} waiting</button>}</div>
           {pending.length === 0 ? (
             <Card className="p-5 text-[14px] leading-relaxed text-white/55">Nothing waiting. When an agent asks before it acts, the card lands here, and you get a Discord DM so you can answer from your phone.</Card>
@@ -385,6 +393,18 @@ function Home({ data, now, session, go, onOpen, onChanged }: { data: Overview; n
           )}
         </section>
       </aside>
+    </div>
+  );
+}
+
+function ConnectCommand({ session }: { session: Session }) {
+  const [copied, setCopied] = useState(false);
+  const cmd = `claude mcp add --transport http trevs https://mcp.trevsagents.com --header "Authorization: Bearer ${session.fuelKey}"`;
+  const copy = async () => { try { await navigator.clipboard.writeText(cmd); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch {} };
+  return (
+    <div className="mt-3">
+      <pre className="overflow-auto whitespace-pre-wrap break-all rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[11.5px] leading-relaxed text-white/75">{cmd}</pre>
+      <div className="mt-2 flex items-center gap-3"><button onClick={copy} className="rounded-lg bg-white px-3 py-1 text-xs font-extrabold text-black">{copied ? "Copied" : "Copy"}</button><span className="text-[11px] text-white/40">Your key is in the command. Keep it to yourself.</span></div>
     </div>
   );
 }

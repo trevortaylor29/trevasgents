@@ -719,6 +719,27 @@ function HomeTab({
         </h1>
       </div>
 
+      {/* What the membership keeps switched on, and what pauses when it ends. Stated up front so nobody is surprised. */}
+      <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <div className="text-sm font-bold text-white">Your membership keeps these on</div>
+          <div className="text-[11px] text-white/40">Inner Circle · active</div>
+        </div>
+        <ul className="mt-3 grid gap-2 text-[13px] text-white/65 sm:grid-cols-2">
+          <li className="flex gap-2"><span className="text-emerald-300">●</span><span><b className="text-white/90">The builder and the copilot.</b> New agents, dashboards, setup help.</span></li>
+          <li className="flex gap-2"><span className="text-emerald-300">●</span><span><b className="text-white/90">The Discord.</b> Your Inner Circle role and the channels.</span></li>
+          {HUB_PREVIEW_EMAILS.has(account.email.toLowerCase()) && (
+            <li className="flex gap-2 sm:col-span-2"><span className="text-emerald-300">●</span><span><b className="text-white/90">The Trevs tools inside your Claude Code.</b> Video research, problem finds, vetted ideas, the agent library, ask-before-acting approvals and run reporting. One command connects them:</span></li>
+          )}
+        </ul>
+        {HUB_PREVIEW_EMAILS.has(account.email.toLowerCase()) && (
+          <pre className="mt-3 overflow-auto whitespace-pre-wrap rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[11.5px] leading-relaxed text-white/75">{`claude mcp add --transport http trevs https://mcp.trevsagents.com --header "Authorization: Bearer ${account.fuelKey}"`}</pre>
+        )}
+        <p className="mt-3 text-[12px] leading-relaxed text-white/45">
+          When the membership ends, all of this pauses: the builder locks, the copilot stops answering, the tools stop answering inside Claude Code, and the Discord role is removed. Nothing is deleted. Resubscribe and it all comes back exactly as you left it. The agents you already built keep running on your own machine either way.
+        </p>
+      </div>
+
       {/* "Ok, what now?" — setup just finished and there are no agents yet: lay out the 2 moves. */}
       {setupComplete && agentCount === 0 ? (
         <div className="mb-6 rounded-2xl border border-emerald-300/35 bg-gradient-to-r from-emerald-500/[0.10] to-cyan-500/[0.06] p-6 shadow-[0_0_60px_-18px_rgba(52,211,153,0.5)]">
