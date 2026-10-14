@@ -592,6 +592,15 @@ function Sidebar({
               {n.label}
             </button>
           ))}
+          <a
+            href="/hub"
+            className="mt-2 flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium text-white/50 transition-colors hover:bg-white/[0.04] hover:text-white/90"
+            title="Where your agents report in"
+          >
+            <span className="text-base">🛰️</span>
+            Hub
+            <span className="ml-auto rounded-md border border-violet-300/30 bg-violet-400/10 px-1.5 py-0.5 text-[10px] font-semibold tracking-[0.12em] text-violet-200">NEW</span>
+          </a>
         </nav>
         <div className="mt-4 rounded-xl border border-white/8 bg-black/30 p-3">
           <div className="truncate text-xs font-medium text-white/70" title={account.email}>
@@ -653,6 +662,10 @@ function Sidebar({
               {n.label}
             </button>
           ))}
+          <a href="/hub" className="flex shrink-0 items-center gap-1.5 rounded-full border border-violet-300/30 bg-violet-400/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-100">
+            <span>🛰️</span>
+            Hub
+          </a>
         </nav>
       </header>
     </>
