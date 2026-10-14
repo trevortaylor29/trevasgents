@@ -273,13 +273,13 @@ function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  // Copy is Trevor's, verbatim and static (2026-10-13): "for 1 week only", "4 spots left". No counters, nothing computed.
+  // Copy is Trevor's, verbatim and static (2026-10-13): "for 1 week only", "3 spots left". No counters, nothing computed.
   const priceNum = (lt.price || "$99").replace(/[^0-9.]/g, "");
   return (
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner="⏳ Offer ends in 1 week · 4 spots left"
+      banner="⏳ Offer ends in 1 week · 3 spots left"
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
@@ -290,7 +290,7 @@ function LifetimeCard() {
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
         `This $${priceNum} price is only available for 1 week, then lifetime access goes back to $${lt.later_price}`,
-        "4 spots left at this price",
+        "3 spots left at this price",
       ]}
       cta="Get lifetime access"
       href={lt.url}
