@@ -1526,9 +1526,9 @@ export type FaqEntry = { q: string; keywords: string[]; a: string };
 
 export const COPILOT_FAQ: FaqEntry[] = [
   {
-    q: "What is fuel and why do I need it?",
+    q: "What happened to fuel? What do my agents run on?",
     keywords: ["fuel", "credits", "token", "billing", "engine", "api cost", "why", "retired", "archived"],
-    a: "Fuel has been retired, and everyone who bought it is being refunded to their original payment method (no action needed, allow a few days for it to appear). Agents now run on your OWN AI engine: the simplest is an OpenRouter key (one key works with almost every model, pay as you go, ~$5 to $10 gets you started), or a Claude / ChatGPT-Codex subscription you already pay for. When you add an agent, the builder walks your Claude Code through connecting it once, then every agent reuses it. Building agents is always free; you only pay your provider when an agent actually thinks (usually a few cents).",
+    a: "Fuel was retired in August 2026 and everyone who bought it was refunded. There is nothing to buy or top up. Your agents run on your own AI engine: the simplest is an OpenRouter key (one key works with almost every model, pay as you go, $5 to $10 gets you started). Setup walks your Claude Code through connecting it once and every agent reuses it. Do not run agents on a personal Claude or ChatGPT subscription; that is against their terms.",
   },
   {
     q: "How do I add an agent?",
@@ -1553,7 +1553,7 @@ export const COPILOT_FAQ: FaqEntry[] = [
   {
     q: "How much does it cost to run agents?",
     keywords: ["how much", "cost", "price", "monthly", "spend", "estimate", "burn"],
-    a: "Rough fuel guide per agent per month: Earl almost nothing (he only fires on earnings, ~4x a year per company), Craig a few dollars, Ace and Sage around $4-10, Bolt around $9 (he runs 6x a day), Scout $5-15, Ant a few dollars. Most people running 2-3 agents land around $10-25/month of fuel, plus a ~$5 server if you want 24/7. Building and dashboards are free.",
+    a: "Agents idle for free and spend only when they do a task, a few cents each on a cheap model through your own OpenRouter key. Most people running 2 or 3 agents land around $5 to $20 a month of API usage, plus a $4 to $8 server if you want them on 24/7. The builder, the copilot and dashboards cost nothing beyond the membership.",
   },
   {
     q: "Is my trading agent using real money?",
@@ -1566,9 +1566,9 @@ export const COPILOT_FAQ: FaqEntry[] = [
     a: "A solid starter pair is an analyst + a stock trader (Ant + Sage in our store). They share the same kind of market data, they're cheap to run, and together they teach you the whole pattern: fetcher, cycles, reports, memory. Add one more each month as you get comfortable — Earl is a great third (nearly free), then branch by interest: Bolt for crypto, Ace for sports, Craig for flips, Scout + Forge for building products. (Tip: give your agents your own names when you build them — they're your crew.)",
   },
   {
-    q: "What's the difference between Lite, Pro, and Max?",
+    q: "What does the Brain power setting mean?",
     keywords: ["lite", "pro", "max", "smart", "fast", "model", "brain", "difference", "which engine", "tier"],
-    a: "They're the three engines your fuel runs, cheapest to premium. Lite is the default — cheap, fast, and handles most agent work fine (your Claude Code does the heavy building, so agents rarely need a genius brain). Pro is smarter for tougher jobs. Max is top-tier intelligence for your hardest work or anything high-stakes. Lite costs the least to run; Max costs the most. Every agent lets you pick at install, and you can switch anytime by asking your Claude Code.",
+    a: "Those were the old fuel tiers and fuel is gone. Each agent now has a Brain power setting: Cheapest and fast (the default, handles almost everything), Balanced, or Most capable. Setup maps it to a matching model on whatever engine you connected, usually OpenRouter. Start cheap; your Claude Code does the heavy building, so agents rarely need a premium brain.",
   },
   {
     q: "How do I keep my AI costs low?",
@@ -1606,9 +1606,9 @@ export const COPILOT_FAQ: FaqEntry[] = [
     a: "Yes, through shared files and a task queue rather than direct chatter. The guide's pattern: each agent keeps its own state files, a lightweight task queue moves work between them (Scout approves a problem, Forge picks it up as a task), and an optional manager agent routes and escalates. Start with independent agents; add coordination once two of them genuinely need it.",
   },
   {
-    q: "When does the live copilot launch?",
+    q: "Is the copilot live?",
     keywords: ["when", "launch", "live", "coming", "soon", "available", "waitlist", "copilot"],
-    a: "The always-on copilot is landing soon; you're early. (Note: fuel has been retired — agents now run on your own OpenRouter key or Claude/Codex subscription, which the builder helps you connect.) Watch Discord #⚒️ inner-circle-tools for updates.",
+    a: "It is live. This chat is the copilot, grounded in the Trevs facts, included with your membership and unlimited. Ask it anything about setup, agents, dashboards or your membership. For an error on your own machine, paste it to your Claude Code first; it can see your setup and the copilot cannot.",
   },
 ];
 

@@ -755,7 +755,7 @@ function HomeTab({
             >
               <div className="text-sm font-bold text-white">1 · Add your first agent →</div>
               <p className="mt-1 text-[12px] leading-relaxed text-white/55">
-                Pick a proven agent, paste it into Claude Code, and it starts running on your fuel.
+                Pick a proven agent, paste it into the same Claude Code where you ran Setup, and it starts running on your own AI key.
               </p>
             </button>
             <button
@@ -1145,7 +1145,7 @@ function Onboarding({ account, onDone }: { account: Account; onDone: (path: Buil
                 : [
                     { n: "1", icon: "🤖", t: "Pick an agent", d: "Proven agents from the real Trevs operation: traders, builders, analysts." },
                     { n: "2", icon: "📋", t: "Copy the instruction", d: "We generate one block, tailored to add it into YOUR existing setup without touching your other agents." },
-                    { n: "3", icon: "✨", t: "Paste into Claude Code", d: "It inspects your structure, mirrors it, and sets up the new agent." },
+                    { n: "3", icon: "✨", t: "Paste into the SAME Claude Code where you ran Setup", d: "Your ecosystem lives on the machine Setup ran on (your VPS, if that is where you did it). Open Claude Code there, paste, and it slots the new agent in." },
                   ]
               ).map((s) => (
                 <div key={s.n} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left">
@@ -2063,7 +2063,7 @@ function OutputView({
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
         {[
           { n: "1", t: "Copy the instruction", d: "The whole block below, one click." },
-          { n: "2", t: "Paste into Claude Code", d: "Open Claude Code on your computer, paste, hit enter." },
+          { n: "2", t: "Paste into the same Claude Code where you ran Setup", d: "On the machine your ecosystem lives on. If Setup ran on your VPS, SSH in and open Claude Code there, then paste and hit enter." },
           { n: "3", t: "Review & approve", d: "It shows you everything before finalizing. You stay in control." },
         ].map((s) => (
           <div key={s.n} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5">
