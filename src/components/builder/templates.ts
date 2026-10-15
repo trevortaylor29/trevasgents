@@ -1171,11 +1171,10 @@ step by step, for MY operating system — including how to open a terminal if I 
 typing, ESPECIALLY my API key: never ask me to paste my key into this chat, and don't run the wizard or type
 my key yourself. My key should only ever go into OpenClaw's own prompt.
 
-The right engine for running agents is an API KEY, not a personal chat subscription — API keys are built
-for automated/programmatic use, so nothing flags them and nothing rate-limits or blocks you. Recommend
-Option A to me unless I say otherwise:
- • OPTION A — OpenRouter (RECOMMENDED, best for almost everyone): one key works with almost every model,
-   pay-as-you-go, cheap ($5–10 gets me going), and zero terms-of-service worries.
+There are three real options and OpenClaw supports all three. Option A suits most people; if I already pay
+for Claude, Option C is a legitimate setup and these are the facts on it:
+ • OPTION A — OpenRouter (RECOMMENDED for always-on background agents): one key works with almost every
+   model, pay-as-you-go, cheap ($5–10 gets me going), and no personal usage caps to run into.
      1. Go to openrouter.ai, sign up, add a little credit ($5–10 is plenty to start).
      2. Keys → Create Key → copy it (it starts with sk-or-...).
      3. In my terminal run \`openclaw onboard\`, choose custom-api-key / OpenAI-compatible, Base URL
@@ -1183,12 +1182,19 @@ Option A to me unless I say otherwise:
         google/gemini-2.5-flash-lite.
  • OPTION B — my own OpenAI / Anthropic / Google API key: same as Option A, that provider's Base URL + my
    key. Also totally fine (it's a real API key).
- • ⚠️ NOT RECOMMENDED — piping a personal Claude Pro/Max or ChatGPT Plus SUBSCRIPTION into OpenClaw to run
-   agents. Those subscriptions are for the official apps, and using them to power automated agents is a
-   terms-of-service gray area that your own Claude Code will (correctly) flag and refuse, and providers
-   rate-limit or block it. Don't fight that. If I ask for it, steer me to Option A instead. (Using Claude
-   Code itself to BUILD my setup on my subscription is fine — it's only running the AGENTS on a sub that's
-   the problem.)
+ • OPTION C — my existing Claude Pro/Max subscription, through OpenClaw's \`claude-cli\` provider. What that
+   provider actually does: it resolves and runs the real \`claude\` binary already installed here, using the
+   Claude Code login already on this machine, in a normal Claude Code workspace. It is not a third-party
+   client replaying my credentials against the API; it is the same thing as me running \`claude -p\` myself
+   on a schedule, which is my own use of my own subscription. There is no new key to paste. Point an
+   agent's model at \`claude-cli/<model>\` and verify with \`openclaw models list\` and \`openclaw doctor\`.
+   The honest trade-off to tell me about: Pro/Max usage limits are sized for one person working, so several
+   agents on a schedule can eat the five-hour and weekly caps and then stall until they reset, and they
+   share those caps with my own Claude Code sessions. That is why many people keep the subscription for
+   building and put the always-on background agents on a cheap key.
+ • ⚠️ Genuinely off-limits on any provider, and not something to help with: sharing my login with other
+   people, running other people's agents off my single subscription, or pulling the credentials out into
+   something that calls the API directly instead of running the real client.
 
 When it's saved, help me verify: \`openclaw daemon status\`, then a quick test call. Once it's connected,
 every agent I build later just uses it — no key handling again.`;
@@ -1528,7 +1534,7 @@ export const COPILOT_FAQ: FaqEntry[] = [
   {
     q: "What happened to fuel? What do my agents run on?",
     keywords: ["fuel", "credits", "token", "billing", "engine", "api cost", "why", "retired", "archived"],
-    a: "Fuel was retired in August 2026 and everyone who bought it was refunded. There is nothing to buy or top up. Your agents run on your own AI engine: the simplest is an OpenRouter key (one key works with almost every model, pay as you go, $5 to $10 gets you started). Setup walks your Claude Code through connecting it once and every agent reuses it. Do not run agents on a personal Claude or ChatGPT subscription; that is against their terms.",
+    a: "Fuel was retired in August 2026 and everyone who bought it was refunded. There is nothing to buy or top up. Your agents run on your own AI engine: the simplest is an OpenRouter key (one key works with almost every model, pay as you go, $5 to $10 gets you started). Setup walks your Claude Code through connecting it once and every agent reuses it. You can also run agents on the Claude Pro or Max plan you already pay for, through OpenClaw's claude-cli provider: it runs the Claude Code already on your machine with your existing login, so it is allowed. The catch is usage limits rather than rules, since those plans are sized for one person, which is why busy background agents are smoother on a cheap key.",
   },
   {
     q: "How do I add an agent?",

@@ -1857,7 +1857,7 @@ function SetupWizard({
                     <li>• <span className="font-semibold text-cyan-100">Your own OpenAI / Anthropic / Google key</span> — same idea, that provider&apos;s base URL + key.</li>
                   </ul>
                   <p className="mt-2 text-[10px] leading-relaxed text-amber-200/70">
-                    ⚠️ Use an API key, not a personal Claude Pro/Max or ChatGPT Plus <span className="italic">subscription</span>. Running agents on a chat subscription is against the provider&apos;s terms, so Claude Code will refuse it and you&apos;ll get blocked. (Using Claude Code to <span className="italic">build</span> your setup on your sub is fine — it&apos;s only running the agents on a sub that&apos;s the problem.)
+    Already pay for Claude Pro or Max? You can run your agents on it through OpenClaw&apos;s <span className="font-mono text-cyan-200">claude-cli</span> provider, which uses the Claude Code and login already on your machine. That is allowed. The trade-off is usage limits, not rules: those plans are sized for one person, so busy agents on a schedule can eat your caps and stall, which is why a cheap key is the smoother choice for always-on work.
                   </p>
                   <p className="mt-2 text-[10px] leading-relaxed text-white/45">
                     Run <span className="font-mono text-cyan-200">openclaw onboard</span>, choose{" "}
