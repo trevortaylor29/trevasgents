@@ -144,7 +144,7 @@ SETUP: it uses the task queue + API from your backbone (already there). IMPORTAN
           { value: "3x", label: "3 reads a day (cheaper)" },
         ],
         default: "hourly",
-        help: "More reads catch intraday shifts. Fewer reads cost less fuel.",
+        help: "More reads catch intraday shifts. Fewer reads cost less AI credit.",
       },
       MODEL_PARAM,
       CUSTOM_PARAM,
@@ -192,7 +192,7 @@ STATE: watchlist file, data files (fetcher-owned), one report file per day per t
           { value: "4x", label: "4 checks per trading day (faster reactions)" },
         ],
         default: "2x",
-        help: "The guide runs open + close. More check-ins react faster and use more fuel.",
+        help: "The guide runs open + close. More check-ins react faster and use more AI credit.",
       },
       MODEL_PARAM,
       CUSTOM_PARAM,
@@ -549,7 +549,7 @@ HARD RULES (every cycle):
           { value: "quick", label: "Quick scan (cheaper)" },
         ],
         default: "deep",
-        help: "Deeper research means sharper reports and a bit more fuel.",
+        help: "Deeper research means sharper reports and a bit more AI credit.",
       },
       MODEL_PARAM,
       CUSTOM_PARAM,
@@ -1081,11 +1081,11 @@ Create tasks/limits.json:  { "single_task_cost_max": 5.00, "daily_total_spend_ca
 fuel actually gets used, so no need to fire a test agent here; there aren't any yet.)
 Then CELEBRATE and hand them their next TWO moves clearly — this is the "ok, what now?" moment, so make it
 obvious and do NOT just say "done." Say something like:
-  "🎉 Your foundation is live — runtime, gateway, fuel, and the task queue are all running, idle and
+  "🎉 Your foundation is live — runtime, gateway, your AI engine, and the task queue are all running, idle and
    costing nothing until an agent works. Two quick moves to bring it to life, both back at
    trevsagents.com/builder — paste each one here and I'll set it up:
      1) Open the AGENTS tab and add your first agent. It drops right into this structure and starts
-        running on your fuel. (Pick a simple one for your first.)
+        running on your own AI key. (Pick a simple one for your first.)
      2) Open the DASHBOARDS tab and grab the 'Command Deck' — a clean charts + status dashboard (no art,
         one shot). I'll build it against THIS backbone so you can actually watch your agents work.
    Do the agent first, then the dashboard. After that, day-to-day changes — just ask me directly; you only
