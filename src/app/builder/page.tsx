@@ -1755,11 +1755,16 @@ function SetupWizard({
                       <span className="text-white/80">Hetzner</span>, or{" "}
                       <span className="text-white/80">DigitalOcean</span> (often a free credit for new
                       accounts). Choose <span className="text-white/80">Ubuntu 24</span>, at least 4GB RAM,
-                      a region near you.
+                      a region near you.{" "}
+                      <span className="text-amber-200/80">
+                        Ubuntu, never Windows Server. If your provider tells you to connect with Remote Desktop, you
+                        picked a Windows image by mistake — reinstall it as Ubuntu 24 from their control panel (free,
+                        about 10 minutes, and there is nothing on it yet to lose).
+                      </span>
                     </li>
                     <li>
                       <span className="font-semibold text-white/85">2. Connect to it.</span> In your
-                      computer&apos;s terminal:{" "}
+                      computer&apos;s terminal (on Windows that is PowerShell, which already has ssh built in):{" "}
                       <code className="rounded bg-black/40 px-1.5 py-0.5 font-mono text-[11px] text-cyan-200">ssh root@YOUR.SERVER.IP</code>{" "}
                       (type &quot;yes&quot; the first time, paste the password — nothing shows as you type,
                       that&apos;s normal).
