@@ -228,7 +228,7 @@ function GradientTitle({ children, className = "" }: { children: React.ReactNode
 }
 
 // ─── page ────────────────────────────────────────────────────────────────────
-type Tab = "home" | "build" | "dashboards" | "jarvis" | "armory" | "fuel" | "copilot";
+type Tab = "home" | "build" | "dashboards" | "armory" | "fuel" | "copilot";
 type BuildView =
   | { kind: "gallery" }
   | { kind: "foundation" }
@@ -522,7 +522,6 @@ export default function BuilderPage() {
               {tab === "dashboards" && (
                 <DashboardsTab account={account} view={dashView} setView={setDashView} onBuilt={recordBuild} />
               )}
-              {tab === "jarvis" && <JarvisTab account={account} />}
               {tab === "armory" && <ArmoryTab account={account} />}
               {tab === "fuel" && <FuelTab account={account} />}
               {tab === "copilot" && <CopilotTab account={account} />}
@@ -553,7 +552,6 @@ const NAV: { id: Tab; label: string; icon: string }[] = [
   { id: "home", label: "Home", icon: "🏠" },
   { id: "build", label: "Agents", icon: "🤖" },
   { id: "dashboards", label: "Dashboards", icon: "🖥️" },
-  { id: "jarvis", label: "Jarvis", icon: "🛰️" },
   { id: "armory", label: "Armory", icon: "🧰" },
   { id: "copilot", label: "Copilot", icon: "💬" },
   { id: "fuel", label: "Fuel (archived)", icon: "⚡" },
