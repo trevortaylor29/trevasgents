@@ -228,7 +228,7 @@ function GradientTitle({ children, className = "" }: { children: React.ReactNode
 }
 
 // ─── page ────────────────────────────────────────────────────────────────────
-type Tab = "home" | "build" | "dashboards" | "armory" | "fuel" | "copilot";
+type Tab = "home" | "build" | "dashboards" | "jarvis" | "armory" | "fuel" | "copilot";
 type BuildView =
   | { kind: "gallery" }
   | { kind: "foundation" }
@@ -522,6 +522,7 @@ export default function BuilderPage() {
               {tab === "dashboards" && (
                 <DashboardsTab account={account} view={dashView} setView={setDashView} onBuilt={recordBuild} />
               )}
+              {tab === "jarvis" && <JarvisTab account={account} />}
               {tab === "armory" && <ArmoryTab account={account} />}
               {tab === "fuel" && <FuelTab account={account} />}
               {tab === "copilot" && <CopilotTab account={account} />}
@@ -552,6 +553,7 @@ const NAV: { id: Tab; label: string; icon: string }[] = [
   { id: "home", label: "Home", icon: "🏠" },
   { id: "build", label: "Agents", icon: "🤖" },
   { id: "dashboards", label: "Dashboards", icon: "🖥️" },
+  { id: "jarvis", label: "Jarvis", icon: "🛰️" },
   { id: "armory", label: "Armory", icon: "🧰" },
   { id: "copilot", label: "Copilot", icon: "💬" },
   { id: "fuel", label: "Fuel (archived)", icon: "⚡" },
@@ -2281,6 +2283,88 @@ const BUILDER_ADMIN = "trevor77077@gmail.com";
 // system-safe skills are served (the API filters + sanitizes; nothing here exposes
 // internal paths, agent names, or the operation).
 type Skill = { slug: string; name: string; purpose: string; license: string; content: string };
+
+/* ── Jarvis ────────────────────────────────────────────────────────────────────────────────────────────
+ * One screen, three steps, no prompt to paste anywhere. The install line carries their own builder key,
+ * which is what the hub checks their membership against, so this page IS the distribution. Everything it
+ * describes runs on their machine: we hold no credentials and Jarvis never calls us after the download. */
+function Copyable({ text, label }: { text: string; label: string }) {
+  const [done, setDone] = useState(false);
+  return (
+    <div className="mt-3">
+      <pre className="overflow-auto whitespace-pre-wrap break-all rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[11.5px] leading-relaxed text-white/75">{text}</pre>
+      <button
+        onClick={async () => { try { await navigator.clipboard.writeText(text); setDone(true); setTimeout(() => setDone(false), 1800); } catch {} }}
+        className="mt-2 rounded-lg bg-white px-3 py-1 text-xs font-extrabold text-black"
+      >{done ? "Copied" : label}</button>
+    </div>
+  );
+}
+
+function JarvisTab({ account }: { account: Account }) {
+  const install = `curl -fsSL https://hub.trevsagents.com/install/${account.fuelKey} | bash`;
+  return (
+    <div>
+      <div className="mb-6">
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">Included with your membership</div>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          Talk to <GradientTitle>your agents.</GradientTitle>
+        </h1>
+        <p className="mt-2 max-w-[640px] text-[15px] leading-relaxed text-white/60">
+          Jarvis is a command center that sits over the ecosystem you already built. Ask it how the
+          operation is doing and it answers out loud, drawn, from what your agents actually did. It runs
+          on your machine, on your own AI key. We never see your data and it never calls us again after
+          the download.
+        </p>
+      </div>
+
+      <div className="mb-6 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/builder/jarvis.png" alt="Jarvis answering a question about an agent operation, with a timeline of what each agent did, the task queue, and the agents that are blocked" className="w-full" />
+      </div>
+
+      <div className="grid gap-4">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="text-sm font-bold text-white">1 &middot; Install it</div>
+          <p className="mt-1 text-[13px] leading-relaxed text-white/60">
+            Run this on the machine where your agents live. It downloads Jarvis, finds your task queue and
+            your agents folder by itself, and starts. Nothing to configure and nothing to build.
+          </p>
+          <Copyable text={install} label="Copy the install line" />
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="text-sm font-bold text-white">2 &middot; Give it a brain</div>
+          <p className="mt-1 text-[13px] leading-relaxed text-white/60">
+            Open the <span className="font-mono text-white/80">.env</span> it wrote in{" "}
+            <span className="font-mono text-white/80">~/jarvis</span>, put your OpenRouter key in, and
+            restart it. An answer costs well under a cent and it is billed to you, never to us.
+          </p>
+          <Copyable text={"OPENROUTER_API_KEY=sk-or-...\nsystemctl restart jarvis"} label="Copy" />
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="text-sm font-bold text-white">3 &middot; Open it</div>
+          <p className="mt-1 text-[13px] leading-relaxed text-white/60">
+            On the machine itself it is at <span className="font-mono text-white/80">http://localhost:4200</span>.
+            From your own computer, open a tunnel in a terminal and keep it open, then use the same address.
+          </p>
+          <Copyable text={"ssh -L 4200:127.0.0.1:4200 root@YOUR.SERVER.IP"} label="Copy the tunnel line" />
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+        <div className="text-sm font-bold text-white">What it can see, and what it will not do</div>
+        <ul className="mt-3 grid gap-2 text-[13px] text-white/65 sm:grid-cols-2">
+          <li className="flex gap-2"><span className="text-emerald-300">&#9679;</span><span>Your crew, your task queue, your events, what each agent costs, your briefings and whatever else your backbone exposes. It probes your machine, so it only ever offers what you actually have.</span></li>
+          <li className="flex gap-2"><span className="text-emerald-300">&#9679;</span><span>It can give an agent work or wake one, and act in your own apps if you connect a Zapier server. Every one of those shows you a card first and runs only when you say yes.</span></li>
+          <li className="flex gap-2"><span className="text-emerald-300">&#9679;</span><span>It never touches money, billing or payment systems, whatever it is asked.</span></li>
+          <li className="flex gap-2"><span className="text-emerald-300">&#9679;</span><span>If your membership ends the download pauses, but anything already installed keeps running: it is yours and it does not phone home.</span></li>
+        </ul>
+      </div>
+    </div>
+  );
+}
 
 function ArmoryTab({ account }: { account: Account }) {
   const [skills, setSkills] = useState<Skill[] | null>(null);
