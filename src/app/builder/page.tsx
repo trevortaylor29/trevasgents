@@ -728,15 +728,9 @@ function HomeTab({
         <ul className="mt-3 grid gap-2 text-[13px] text-white/65 sm:grid-cols-2">
           <li className="flex gap-2"><span className="text-emerald-300">●</span><span><b className="text-white/90">The builder and the copilot.</b> New agents, dashboards, setup help.</span></li>
           <li className="flex gap-2"><span className="text-emerald-300">●</span><span><b className="text-white/90">The Discord.</b> Your Inner Circle role and the channels.</span></li>
-          {HUB_PREVIEW_EMAILS.has(account.email.toLowerCase()) && (
-            <li className="flex gap-2 sm:col-span-2"><span className="text-emerald-300">●</span><span><b className="text-white/90">The Trevs tools inside your Claude Code.</b> Video research, problem finds, vetted ideas, the agent library, ask-before-acting approvals and run reporting. One command connects them:</span></li>
-          )}
         </ul>
-        {HUB_PREVIEW_EMAILS.has(account.email.toLowerCase()) && (
-          <pre className="mt-3 overflow-auto whitespace-pre-wrap rounded-xl border border-white/10 bg-black/50 p-3 font-mono text-[11.5px] leading-relaxed text-white/75">{`claude mcp add --transport http trevs https://mcp.trevsagents.com --header "Authorization: Bearer ${account.fuelKey}"`}</pre>
-        )}
         <p className="mt-3 text-[12px] leading-relaxed text-white/45">
-          When the membership ends, all of this pauses: the builder locks, the copilot stops answering, the tools stop answering inside Claude Code, and the Discord role is removed. Nothing is deleted. Resubscribe and it all comes back exactly as you left it. The agents you already built keep running on your own machine either way.
+          When the membership ends, all of this pauses: the builder locks, the copilot stops answering, and the Discord role is removed. Nothing is deleted. Resubscribe and it all comes back exactly as you left it. The agents you already built keep running on your own machine either way.
         </p>
       </div>
 
