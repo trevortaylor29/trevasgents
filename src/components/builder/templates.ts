@@ -39,6 +39,16 @@ export type AgentTemplate = {
   playbook: (p: Record<string, string>) => string;
 };
 
+/* The web-access block the newer agents share. Paul carries his own copy inline, which is exactly why
+   Paul works: an instruction that points at "the web access note in your setup" points at nothing,
+   because no such note is generated. Caught by rendering a full instruction and grepping for it
+   (2026-10-17). Any new agent that needs the web interpolates this rather than referring to it. */
+const WEB_ACCESS = `WEB ACCESS — wire this up FIRST and confirm it with one live lookup; this agent must never work from memory:
+ • If my agents run on my Claude plan (the claude-cli provider) they already have WebSearch and WebFetch through Claude Code. Nothing to install, just verify the call actually works.
+ • If they run on an OpenRouter key, append :online to THIS agent's model id (e.g. anthropic/claude-sonnet-4.6:online). That turns on OpenRouter's web plugin at roughly a cent per search on top of tokens. Set it for this agent only, never globally.
+ • Otherwise give it a search tool whose cost I can see: a small script it calls with Bash against a search API I sign up for (Serper and Brave both have free tiers), or OpenClaw's SearXNG plugin if I would rather self-host for nothing.
+If none of that is available, STOP and tell me which one to set up. Do not build a workaround that guesses.`;
+
 const MODEL_PARAM: TemplateParam = {
   key: "model",
   label: "Brain power",
@@ -817,8 +827,9 @@ ACCESS — set this up FIRST; Remy is useless without it and must never guess at
    The Data API alone gives views and likes, which is not enough to tell me WHY anything happened.
  • QUOTA IS REAL: 10,000 units a day, and a search call costs 100 while a list call costs 1. Budget it.
    Never poll in a loop. If you are near the cap, skip the nice-to-haves and keep comment triage.
- • Web search, for reading the niche (see the WEB ACCESS note in my setup). Optional but it is what makes
-   the "what to make next" step worth anything.
+ • Web search, for reading the niche — it is what makes the "what to make next" step worth anything.
+
+${WEB_ACCESS}
 If any of that is missing, STOP and tell me exactly which piece to set up. Do not estimate numbers you
 cannot read, and never present an estimate as a measurement.
 
@@ -893,9 +904,10 @@ THE EDGE, and the reason this agent is written the way it is: nearly every drops
 TRIGGER: scheduled, one focused cycle at a time. Two or three genuinely checked products a week beats fifty scraped ones.
 
 WHAT OTTO MUST BE ABLE TO REACH — set this up first.
- • Web search and page fetching, so it can see what is actually selling and read real supplier pages
-   (see the WEB ACCESS note in my setup). Without it Otto is guessing, and a guessed product costs me
-   real ad money to disprove.
+ • Web search and page fetching, so it can see what is actually selling and read real supplier pages.
+   Without it Otto is guessing, and a guessed product costs me real ad money to disprove.
+
+${WEB_ACCESS}
  • A supplier source I can actually order from. CJ Dropshipping and Zendrop both have APIs and warehoused
    stock; AliExpress is cheapest and slowest. Which one I use decides what shipping time Otto is allowed
    to claim, which is the most important sentence on the whole product page.
@@ -988,6 +1000,7 @@ HARD RULES:
       CUSTOM_PARAM,
     ],
     playbook: (p) => `ROLE: Kit, a video-making agent for a channel about ${p.topic || "the topic the user sets"}. It takes a brief and produces a finished ${p.format === "long" ? "6 to 12 minute long-form video" : p.format === "both" ? "long-form video, plus shorts cut from it" : "vertical short, under 60 seconds"}: script, narration, visuals, the cut, and a thumbnail. It uploads as PRIVATE and stops. A person publishes.
+TRIGGER: scheduled, ${p.cadence === "1d" ? "one video a day" : p.cadence === "1w" ? "one video a week" : "three videos a week"}. One video per cycle, finished, never two half-made.
 READ THIS FIRST, because it decides whether anything Kit makes is worth making. In July 2025 YouTube rewrote its repetitious-content rule into an INAUTHENTIC CONTENT policy, and in 2026 it is enforced at the level of a whole CHANNEL rather than a single video, on a three-strike path: a warning, a 90-day suspension, then removal from the Partner Program. Three things are demonetised by name:
  • reading out material someone else wrote, verbatim — articles, news feeds, forum posts, a script lifted from another video;
  • mass-produced videos built from the same template, with the same structure every time;
@@ -1000,8 +1013,11 @@ WHAT KIT NEEDS — set this up first:
  • ${p.voice === "tts" ? "A text-to-speech key. OpenAI's tts-1 is about $15 per million characters, which is roughly a cent and a half for a long video's narration; ElevenLabs sounds better and costs more. Pick ONE voice and keep it for the life of the channel, because a voice that changes between videos reads as mass production to a human and to a reviewer." : "Nothing — Kit writes the script and I record the narration myself, then point it at the audio file."}
  • Visuals I have the right to use: footage or stills I shot, properly licensed stock, or generated images that are clearly illustrative rather than passed off as real. Never footage lifted from another creator, and never a news clip.
  • Music, if any, that is licensed for monetised video. YouTube's own Audio Library is free and safe. A Content ID claim on the music takes the revenue from the whole video.
+ • Web access, for step 2 — see below.
  • The YouTube Data API v3 with OAuth, for the upload (the same setup a channel-manager agent uses). The daily quota is 10,000 units and ONE upload costs about 1,600 of them, so roughly six uploads a day is the hard ceiling whatever I ask for.
 If a piece is missing, STOP and name it. Do not improvise around a missing right to use something.
+
+${WEB_ACCESS}
 
 EACH CYCLE — one video, start to finish:
 1. TAKE THE BRIEF. From my channel manager agent if I run one, from my own list otherwise. Before anything else, read the last five videos' titles and structures out of memory and make sure this one is genuinely DIFFERENT in shape, not just in subject. If it is not, change the shape: a different opening, a different structure, a different length. This is the rule that keeps the channel monetised and it is checked here, first, while changing it is still free.
@@ -1378,7 +1394,7 @@ obvious and do NOT just say "done." Say something like:
 const AGENT_SHAPE: Record<string, "data" | "scheduled" | "task" | "event"> = {
   ant: "data", sage: "data", bolt: "data", ace: "data", craig: "data", scout: "data",
   earl: "event",       // fires when a NEW filing lands, not on a clock
-  pham: "scheduled", paul: "scheduled",
+  pham: "scheduled", paul: "scheduled", remy: "scheduled", otto: "scheduled", kit: "scheduled",
   matt: "task", forge: "task", dennis: "task", bunc: "task", finn: "task", luke: "task",
 };
 // Only true traders/bettors get the paper-money caveat in the footer.
