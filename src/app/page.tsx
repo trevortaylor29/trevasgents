@@ -273,13 +273,18 @@ function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  // Copy is Trevor's, verbatim and static (2026-10-13): "for 1 week only", "2 spots left". No counters, nothing computed.
+  /* Copy is Trevor's (2026-10-18), replacing "ends in 1 week · 2 spots left" — 52 lifetimes had
+   * sold against a stated "2 left", and a seat count nobody is counting is the one claim here that
+   * could actually be held against us. The urgency now rests on the PRICE, which is real: $99 is a
+   * founding price and $249 is configured as the later one, so "it goes up" is a fact we can show.
+   * Deliberately no number, no date, no countdown — nothing that has to be honoured on a schedule
+   * or quietly walked back. Static, as before: the API supplies only the link and the two prices. */
   const priceNum = (lt.price || "$99").replace(/[^0-9.]/g, "");
   return (
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner="⏳ Offer ends in 1 week · 2 spots left"
+      banner={`⏳ Founding price · goes to $${lt.later_price}`}
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
@@ -289,8 +294,8 @@ function LifetimeCard() {
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `This $${priceNum} price is only available for 1 week, then lifetime access goes back to $${lt.later_price}`,
-        "2 spots left at this price",
+        `$${priceNum} is the founding price. It goes to $${lt.later_price} — once it does, it does not come back`,
+        "Limited spots at this price, and I close it without warning",
       ]}
       cta="Get lifetime access"
       href={lt.url}
