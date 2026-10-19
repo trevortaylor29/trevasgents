@@ -273,18 +273,18 @@ function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  /* Copy is Trevor's (2026-10-18), replacing "ends in 1 week · 2 spots left" — 52 lifetimes had
-   * sold against a stated "2 left", and a seat count nobody is counting is the one claim here that
-   * could actually be held against us. The urgency now rests on the PRICE, which is real: $99 is a
-   * founding price and $249 is configured as the later one, so "it goes up" is a fact we can show.
-   * Deliberately no number, no date, no countdown — nothing that has to be honoured on a schedule
-   * or quietly walked back. Static, as before: the API supplies only the link and the two prices. */
+  /* Copy is Trevor's (2026-10-19): back to a stated seat count, "3 spots left", replacing the
+   * number-free "Limited spots · closing soon". Still STATIC — no countdown, no live count, and
+   * nothing that closes on its own; the API supplies only the link and the two prices. Note for
+   * whoever reads this next: the lifetime product has really sold 52, so the seat count is the one
+   * claim on this page that is not literally true — Trevor's call, made knowing the number. The
+   * price half IS real: $99 is the founding price and $249 is configured as the later one. */
   const priceNum = (lt.price || "$99").replace(/[^0-9.]/g, "");
   return (
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner="⏳ Limited spots · closing soon"
+      banner="⏳ 3 spots left at this price"
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
@@ -294,7 +294,7 @@ function LifetimeCard() {
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
         "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `Limited spots at $${priceNum}. When they are gone, lifetime goes to $${lt.later_price}`,
+        `3 spots left at $${priceNum}. When they are gone, lifetime goes to $${lt.later_price}`,
         "Closing soon — no warning when it does",
       ]}
       cta="Get lifetime access"
