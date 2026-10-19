@@ -273,29 +273,37 @@ function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  /* Copy is Trevor's (2026-10-19): back to a stated seat count, "3 spots left", replacing the
-   * number-free "Limited spots · closing soon". Still STATIC — no countdown, no live count, and
-   * nothing that closes on its own; the API supplies only the link and the two prices. Note for
-   * whoever reads this next: the lifetime product has really sold 52, so the seat count is the one
-   * claim on this page that is not literally true — Trevor's call, made knowing the number. The
-   * price half IS real: $99 is the founding price and $249 is configured as the later one. */
-  const priceNum = (lt.price || "$99").replace(/[^0-9.]/g, "");
+  /* URGENCY WITHOUT A NUMBER WE CANNOT BACK (Trevor, 2026-10-20: "advertise urgency but not
+   * violate ftc rules... instead of directly saying 3 spots cuz idk how many").
+   *
+   * The seat count is gone. It was the one claim on this page that was not literally true — the
+   * lifetime product has really sold past fifty — and an invented count is exactly the kind of
+   * scarcity the FTC's rule on deceptive urgency is written about. Every line below is instead a
+   * price fact we can produce a receipt for:
+   *   - $99 is the price being charged right now (from Gumroad, via /api/lifetime).
+   *   - $249 is the configured later price, so "the next one is $249" is a plan, not a fiction.
+   *   - $49 a month is what the monthly membership actually costs today, so the two-month
+   *     break-even is arithmetic a buyer can do themselves.
+   *   - The monthly price really did move from $29.99 to $49 this year, which demonstrates the
+   *     pattern instead of asserting it.
+   * Two things deliberately NOT here: a struck-through "was" price nobody has ever paid, and
+   * anything that claims to close on its own, since by Trevor's own 2026-10-13 decision nothing
+   * actually closes. Still static: no countdown, no live counter. */
   return (
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner="⏳ 3 spots left at this price"
+      banner={`⏳ Founding price — the next one is $${lt.later_price}`}
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
       price={lt.price || "$99"}
-      was={`$${lt.later_price}`}
       priceNote="one payment · yours forever"
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
-        "No monthly charge, ever. Pays for itself in two months against $49 a month",
-        `3 spots left at $${priceNum}. When they are gone, lifetime goes to $${lt.later_price}`,
-        "Closing soon — no warning when it does",
+        `${lt.price || "$99"} once against $49 every month. It pays for itself in two months, then never charges you again`,
+        `This is the founding price and it is set to go to $${lt.later_price}. The price you join at is yours for life`,
+        "Monthly has already gone from $29.99 to $49 this year. Lifetime members never see another increase",
       ]}
       cta="Get lifetime access"
       href={lt.url}
