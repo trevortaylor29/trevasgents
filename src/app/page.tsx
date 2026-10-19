@@ -273,36 +273,45 @@ function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  /* URGENCY WITHOUT A NUMBER WE CANNOT BACK (Trevor, 2026-10-20: "advertise urgency but not
-   * violate ftc rules... instead of directly saying 3 spots cuz idk how many").
+  /* LIMITED TIME OFFER, NO SEAT COUNT (Trevor, 2026-10-20).
    *
-   * The seat count is gone. It was the one claim on this page that was not literally true — the
-   * lifetime product has really sold past fifty — and an invented count is exactly the kind of
-   * scarcity the FTC's rule on deceptive urgency is written about. Every line below is instead a
-   * price fact we can produce a receipt for:
-   *   - $99 is the price being charged right now (from Gumroad, via /api/lifetime).
-   *   - $249 is the configured later price, so "the next one is $249" is a plan, not a fiction.
-   *   - $49 a month is what the monthly membership actually costs today, so the two-month
-   *     break-even is arithmetic a buyer can do themselves.
-   *   - The monthly price really did move from $29.99 to $49 this year, which demonstrates the
-   *     pattern instead of asserting it.
-   * Two things deliberately NOT here: a struck-through "was" price nobody has ever paid, and
-   * anything that claims to close on its own, since by Trevor's own 2026-10-13 decision nothing
-   * actually closes. Still static: no countdown, no live counter. */
+   * The seat count stays gone — it was the one claim here that was not literally true (the
+   * lifetime product has really sold past fifty) and an invented count is exactly the scarcity
+   * the FTC's deceptive-urgency rule is written about. The word "founding" is gone too; he reads
+   * it as meaningless, and "limited time offer" is what this actually is.
+   *
+   * THE STRUCK-THROUGH $249 IS BACK AT HIS INSTRUCTION — "that's what I was gonna charge for it".
+   * It is the configured regular price (INNER_CIRCLE_LIFETIME_LATER_PRICE, served by
+   * /api/lifetime), not a number invented for the card, and the copy beside it says the price
+   * GOES to $249 rather than claiming anyone has already paid it. I flagged the risk once: a
+   * reference price nobody has been charged is the classic comparison-pricing problem, and the
+   * defence is that $249 becomes the real price when the offer ends. That makes raising it the
+   * thing that keeps this honest — it is already a standing task in CLAUDE.md.
+   *
+   * Everything else on the card is arithmetic a buyer can check: $99 once against the $49 a month
+   * the membership really costs, and the $29.99 -> $49 move that really happened this year. Still
+   * static — no countdown, no live counter, nothing that closes on its own. */
   return (
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner={`⏳ Founding price — the next one is $${lt.later_price}`}
+      banner="⏳ Limited time offer"
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
       price={lt.price || "$99"}
-      priceNote="one payment · yours forever"
+      was={`$${lt.later_price}`}
+      priceNote="one payment · yours forever · ~$400 value"
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
+        /* THE VALUE FIGURE (Trevor, 2026-10-20: "say what we estimate the course value to be").
+           Kept as an ESTIMATE in our own words and tied to a real number rather than asserted out
+           of the air: the membership genuinely costs $49 a month, so a year of it is $588 and ~$400
+           is the conservative side of that. A value claim a buyer can derive is the one kind that
+           survives being questioned. */
+        `We put what is inside at about $400 — less than a year of the $49 monthly membership. You pay ${lt.price || "$99"}, once`,
         `${lt.price || "$99"} once against $49 every month. It pays for itself in two months, then never charges you again`,
-        `This is the founding price and it is set to go to $${lt.later_price}. The price you join at is yours for life`,
+        `Limited time at ${lt.price || "$99"}. The price goes to $${lt.later_price} — and the price you join at is yours for life`,
         "Monthly has already gone from $29.99 to $49 this year. Lifetime members never see another increase",
       ]}
       cta="Get lifetime access"
