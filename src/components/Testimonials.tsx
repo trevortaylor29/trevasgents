@@ -48,7 +48,7 @@ export function Testimonials() {
           Real members. <span className="animate-gradient-text">Real builds.</span>
         </h2>
         <p className="mt-4 text-[15px] leading-relaxed text-white/55">
-          2,000+ builders inside — most starting from zero. Here&apos;s what they&apos;re saying and shipping.
+          3,000+ builders inside — most starting from zero. Here&apos;s what they&apos;re saying and shipping.
         </p>
       </motion.div>
 

@@ -64,7 +64,7 @@ function CompareStrip() {
     "A step-by-step road to profit — the exact path from zero to your first dollar",
     "New money-making agents + revenue plays dropped every week (never posted publicly)",
     "Every guide I publish — updated the moment the AI tools change",
-    "A private community of 2,000+ builders shipping real results",
+    "A private community of 3,000+ builders shipping real results",
     "Direct access to me — 1-on-1 help the second you get stuck",
     "Works whether you're starting from scratch or scaling what you've already got",
   ];
@@ -107,7 +107,7 @@ function CompareStrip() {
             Ready to join? Jump to pricing ↓
           </button>
           <span className="text-[11.5px] text-white/40">
-            You&apos;ll scroll past what 2,000+ members are saying — worth a peek on the way.
+            You&apos;ll scroll past what 3,000+ members are saying — worth a peek on the way.
           </span>
         </div>
       </div>
@@ -177,7 +177,7 @@ function Hero() {
         className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/[0.08] px-3.5 py-1.5 text-xs font-medium text-violet-50 backdrop-blur-sm"
       >
         <span aria-hidden="true">🔥</span>
-        <span>2,000+ builders already inside</span>
+        <span>3,000+ builders already inside</span>
       </motion.div>
 
       <motion.h1
@@ -235,7 +235,7 @@ function ProductGrid() {
           "A library of 14 proven agents — add as many as you want (new ones weekly)",
           "Guided ecosystem setup + your own live mission-control dashboard",
           "A step-by-step road to profit — zero to your first dollar",
-          "Private community of 2,000+ + direct 1-on-1 access to me",
+          "Private community of 3,000+ + direct 1-on-1 access to me",
         ]}
         cta="Join Inner Circle"
         href={LINKS.membership}
@@ -251,7 +251,7 @@ function ProductGrid() {
         price="Free"
         priceNote="open to all"
         bullets={[
-          "Chat with 2,000+ other builders",
+          "Chat with 3,000+ other builders",
           "Ask questions, share what you're building",
           "Learn from real teardowns + agent setups",
           "No payment required to join",
