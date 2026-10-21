@@ -268,59 +268,54 @@ function ProductGrid() {
 // ─── LIFETIME OFFER ─────────────────────────────────────────────────────────
 // Every number here is live and true: the seat cap and end date are set on the server, "seats left" is cap minus the
 // product's real Gumroad sales count, and the card only renders once the product exists (2026-10-13).
-type Lifetime = { available: boolean; url?: string; price?: string; later_price?: string };
+type Lifetime = {
+  available: boolean; url?: string; price?: string; later_price?: string;
+  /* Sent only while a discount round is live: the real list price to compare against, and the
+     code the buy link carries. Absent means the round is done and the card shows list. */
+  promo?: boolean; list_price?: string; code?: string;
+};
 function LifetimeCard() {
   const [lt, setLt] = useState<Lifetime | null>(null);
   useEffect(() => { fetch("/api/lifetime", { cache: "no-store" }).then((r) => r.json()).then(setLt).catch(() => setLt({ available: false })); }, []);
   if (!lt || !lt.available || !lt.url) return null;
-  /* LIMITED TIME OFFER, NO SEAT COUNT (Trevor, 2026-10-20).
+  /* THE CARD IS DRIVEN ENTIRELY BY GUMROAD (2026-10-22), and that is what makes every claim on it
+   * true without anybody maintaining it.
    *
-   * NO NUMBER ON THE PAGE, BY DESIGN (Trevor, 2026-10-21). The cap is real — it is however many
-   * members he judges he can actually support, which is his call and nobody else's — but the page
-   * states only that a limit exists. A printed count has to be tracked or it contradicts itself,
-   * and this one did: it read "1 spot left" on the 16th, "2 spots" on the 17th and "3 spots" on
-   * the 19th while the product had really sold past fifty. Scarcity that counts UP tells a
-   * returning visitor the number is decorative. "Limited spots" is true the moment a limit exists
-   * and can never go backwards.
+   * Lifetime is a real $249 product with a capped discount code against it. So the struck-through
+   * price is the price the product genuinely sells at — reach it without the code and you pay list
+   * — rather than a number the page asserts something about. And "limited spots" is enforced by
+   * Gumroad, which counts redemptions and stops honouring the code at the cap, instead of by
+   * somebody remembering to close it.
    *
-   * THE DEADLINE IS WHAT ACTUALLY SELLS, and the numbers say so: the $249 strikethrough was on the
-   * card on the 20th (9 sales) AND the 21st (1 sale), with site traffic flat at ~650 visitors both
-   * days. What changed between them was the seat count and "closing soon" coming off. So the date
-   * carries the urgency here, not the comparison price.
+   * THE CAPACITY NUMBER STAYS PRIVATE. It is Trevor's judgement about how many people he can
+   * actually support, and the page says only that a limit exists. A printed count has to be
+   * tracked or it contradicts itself: this card read "1 spot left" on the 16th, "2 spots" on the
+   * 17th and "3 spots" on the 19th while the product had really sold past fifty. Scarcity that
+   * counts UP tells a returning visitor the number is decorative.
    *
-   * THE STRUCK-THROUGH $249 IS BACK AT HIS INSTRUCTION — "that's what I was gonna charge for it".
-   * It is the configured regular price (INNER_CIRCLE_LIFETIME_LATER_PRICE, served by
-   * /api/lifetime), not a number invented for the card, and the copy beside it says the price
-   * GOES to $249 rather than claiming anyone has already paid it. I flagged the risk once: a
-   * reference price nobody has been charged is the classic comparison-pricing problem, and the
-   * defence is that $249 becomes the real price when the offer ends. That makes raising it the
-   * thing that keeps this honest — it is already a standing task in CLAUDE.md.
-   *
-   * Everything else on the card is arithmetic a buyer can check: $99 once against the $49 a month
-   * the membership really costs, and the $29.99 -> $49 move that really happened this year. Still
-   * static — no countdown, no live counter, nothing that closes on its own. */
+   * When the round sells out the endpoint simply stops sending `promo`, and this card becomes a
+   * plain $249 card with no comparison and no scarcity line — no deploy, no edit. Reopening is a
+   * new code in Gumroad and it comes back on its own. */
+  const price = lt.price || "$99";
+  const list = lt.list_price || `$${lt.later_price}`;
   return (
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner="⏳ LIMITED SPOTS · $99 UNTIL SUNDAY"
+      banner={lt.promo ? "⏳ LIMITED SPOTS AT THIS PRICE" : undefined}
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
-      price={lt.price || "$99"}
-      was={`$${lt.later_price}`}
+      price={price}
+      was={lt.promo ? list : undefined}
       priceNote="one payment · yours forever · ~$400 value"
       bullets={[
         "Everything in the Inner Circle, for good: the Agent Builder, every agent, every guide, the community, me",
-        /* THE VALUE FIGURE (Trevor, 2026-10-20: "say what we estimate the course value to be").
-           Kept as an ESTIMATE in our own words and tied to a real number rather than asserted out
-           of the air: the membership genuinely costs $49 a month, so a year of it is $588 and ~$400
-           is the conservative side of that. A value claim a buyer can derive is the one kind that
-           survives being questioned. */
-        `We put what is inside at about $400 — less than a year of the $49 monthly membership. You pay ${lt.price || "$99"}, once`,
-        `${lt.price || "$99"} once against $49 every month. It pays for itself in two months, then never charges you again`,
-        `${lt.price || "$99"} until Sunday, then it goes to $${lt.later_price}. The price you join at is yours for life`,
-        "Lifetime is capped. When the spots for this round are gone it closes, and it reopens when I can take more",
+        `We put what is inside at about $400 — less than a year of the $49 monthly membership. You pay ${price}, once`,
+        `${price} once against $49 every month. It pays for itself in two months, then never charges you again`,
+        ...(lt.promo
+          ? [`Limited spots at ${price}. When this round is gone it is ${list}, and the price you join at is yours for life`]
+          : [`${price}, once. The price you join at is yours for life`]),
         "Monthly has already gone from $29.99 to $49 this year. Lifetime members never see another increase",
       ]}
       cta="Get lifetime access"
@@ -330,7 +325,6 @@ function LifetimeCard() {
   );
 }
 
-// ─── CARD COMPONENT ─────────────────────────────────────────────────────────
 type Accent = "cyan" | "pink" | "violet" | "amber";
 const ACCENT: Record<Accent, { border: string; text: string; ring: string; glow: string; btn: string }> = {
   cyan: {
