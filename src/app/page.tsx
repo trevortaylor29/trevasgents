@@ -293,6 +293,12 @@ function LifetimeCard() {
    * 17th and "3 spots" on the 19th while the product had really sold past fifty. Scarcity that
    * counts UP tells a returning visitor the number is decorative.
    *
+   * BOTH HALVES OF THE BANNER ARE TRUE UNDER THIS SETUP, which is the point of building it this
+   * way round. The offer is time-limited because it ends when the round fills, even though the
+   * date is not knowable in advance; and spots are limited and some remain, because Gumroad is
+   * holding the count and still honouring the code. The moment either stops being true the banner
+   * is gone, since it renders only while `promo` is set.
+   *
    * When the round sells out the endpoint simply stops sending `promo`, and this card becomes a
    * plain $249 card with no comparison and no scarcity line — no deploy, no edit. Reopening is a
    * new code in Gumroad and it comes back on its own. */
@@ -301,8 +307,7 @@ function LifetimeCard() {
   return (
     <ProductCard
       accent="pink"
-      eyebrow="Lifetime deal · pay once, in for life"
-      banner={lt.promo ? "⏳ LIMITED SPOTS AT THIS PRICE" : undefined}
+      banner={lt.promo ? "⏳ LIMITED TIME OFFER · LIMITED SPOTS LEFT" : undefined}
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
@@ -361,7 +366,7 @@ function ProductCard({
   accent, eyebrow, title, price, priceNote, bullets, cta, href, featured, comingSoon, delay = 0, tag, banner, was,
 }: {
   accent: Accent;
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   price: string;
   priceNote: string;
@@ -415,9 +420,11 @@ function ProductCard({
         </motion.div>
       )}
 
-      <div className={`mb-2 font-mono text-[9px] uppercase tracking-[0.3em] ${c.text} opacity-70`}>
-        {eyebrow}
-      </div>
+      {eyebrow ? (
+        <div className={`mb-2 font-mono text-[9px] uppercase tracking-[0.3em] ${c.text} opacity-70`}>
+          {eyebrow}
+        </div>
+      ) : null}
 
       <h3 className={`mb-4 text-lg font-semibold tracking-tight ${c.text}`}>{title}</h3>
 
