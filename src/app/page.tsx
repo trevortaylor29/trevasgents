@@ -275,10 +275,18 @@ function LifetimeCard() {
   if (!lt || !lt.available || !lt.url) return null;
   /* LIMITED TIME OFFER, NO SEAT COUNT (Trevor, 2026-10-20).
    *
-   * The seat count stays gone — it was the one claim here that was not literally true (the
-   * lifetime product has really sold past fifty) and an invented count is exactly the scarcity
-   * the FTC's deceptive-urgency rule is written about. The word "founding" is gone too; he reads
-   * it as meaningless, and "limited time offer" is what this actually is.
+   * NO NUMBER ON THE PAGE, BY DESIGN (Trevor, 2026-10-21). The cap is real — it is however many
+   * members he judges he can actually support, which is his call and nobody else's — but the page
+   * states only that a limit exists. A printed count has to be tracked or it contradicts itself,
+   * and this one did: it read "1 spot left" on the 16th, "2 spots" on the 17th and "3 spots" on
+   * the 19th while the product had really sold past fifty. Scarcity that counts UP tells a
+   * returning visitor the number is decorative. "Limited spots" is true the moment a limit exists
+   * and can never go backwards.
+   *
+   * THE DEADLINE IS WHAT ACTUALLY SELLS, and the numbers say so: the $249 strikethrough was on the
+   * card on the 20th (9 sales) AND the 21st (1 sale), with site traffic flat at ~650 visitors both
+   * days. What changed between them was the seat count and "closing soon" coming off. So the date
+   * carries the urgency here, not the comparison price.
    *
    * THE STRUCK-THROUGH $249 IS BACK AT HIS INSTRUCTION — "that's what I was gonna charge for it".
    * It is the configured regular price (INNER_CIRCLE_LIFETIME_LATER_PRICE, served by
@@ -295,7 +303,7 @@ function LifetimeCard() {
     <ProductCard
       accent="pink"
       eyebrow="Lifetime deal · pay once, in for life"
-      banner="⏳ Limited time offer"
+      banner="⏳ LIMITED SPOTS · $99 UNTIL SUNDAY"
       featured
       tag="Most Popular"
       title="Inner Circle — Lifetime"
@@ -311,7 +319,8 @@ function LifetimeCard() {
            survives being questioned. */
         `We put what is inside at about $400 — less than a year of the $49 monthly membership. You pay ${lt.price || "$99"}, once`,
         `${lt.price || "$99"} once against $49 every month. It pays for itself in two months, then never charges you again`,
-        `Limited time at ${lt.price || "$99"}. The price goes to $${lt.later_price} — and the price you join at is yours for life`,
+        `${lt.price || "$99"} until Sunday, then it goes to $${lt.later_price}. The price you join at is yours for life`,
+        "Lifetime is capped. When the spots for this round are gone it closes, and it reopens when I can take more",
         "Monthly has already gone from $29.99 to $49 this year. Lifetime members never see another increase",
       ]}
       cta="Get lifetime access"
