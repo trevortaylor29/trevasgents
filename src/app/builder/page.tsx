@@ -841,6 +841,54 @@ function HomeTab({
   );
 }
 
+// Six builder accounts signed up with a domain that can never receive mail (gmail.clm,
+// gmail.comn, gmali.com, gmaol.com, hoymail.com). Each one is a person who asked for a login
+// link, never heard back, and had no way to find out why. A transposition counts as one edit
+// (so gmali/gmail is caught) and a suggestion only fires at distance exactly 1, which was
+// checked against all 41 domains our real members use: the five typos flag, nothing else does.
+const COMMON_EMAIL_DOMAINS = [
+  "gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "icloud.com", "live.com", "msn.com",
+  "aol.com", "proton.me", "protonmail.com", "me.com", "gmx.com", "gmx.de", "ymail.com",
+  "mail.com", "googlemail.com", "yandex.com", "zoho.com", "web.de", "free.fr", "orange.fr",
+  "btinternet.com", "comcast.net", "sbcglobal.net", "verizon.net", "shaw.ca", "rogers.com",
+  "bellsouth.net", "cox.net", "earthlink.net", "mac.com", "fastmail.com", "hey.com",
+  "tutanota.com", "mailfence.com", "pm.me",
+];
+
+// Optimal string alignment distance, capped: we only ever care whether it is exactly 1.
+function editDistance(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  if (Math.abs(m - n) > 1) return 2;
+  const d: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) d[i][0] = i;
+  for (let j = 0; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+      }
+    }
+  }
+  return d[m][n];
+}
+
+// Returns the address it probably meant, or null. Never blocks the form: an unusual domain
+// is far more likely to be someone's own than a mistake.
+function emailSuggestion(value: string): string | null {
+  const at = value.lastIndexOf("@");
+  if (at < 1) return null;
+  const local = value.slice(0, at);
+  const domain = value.slice(at + 1).toLowerCase().trim();
+  if (domain.length < 4 || COMMON_EMAIL_DOMAINS.includes(domain)) return null;
+  for (const candidate of COMMON_EMAIL_DOMAINS) {
+    if (editDistance(domain, candidate) === 1) return local + "@" + candidate;
+  }
+  return null;
+}
+
 // ─── gate (create account / sign in — same form, server decides) ─────────────
 function Gate({ authError }: { authError: string | null }) {
   const [name, setName] = useState("");
@@ -848,6 +896,17 @@ function Gate({ authError }: { authError: string | null }) {
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Supabase refuses a second mail to the same address inside 60s (smtp_max_frequency) and
+  // says nothing about it, so a "send it again" button has to carry the real countdown
+  // rather than cheerfully doing nothing.
+  const [cooldown, setCooldown] = useState(0);
+  const suggestion = emailSuggestion(email.trim());
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setInterval(() => setCooldown((c) => (c <= 1 ? 0 : c - 1)), 1000);
+    return () => clearInterval(t);
+  }, [cooldown]);
 
   // Magic-link sign-in: we email a one-click login link. Clicking it proves the person
   // controls that inbox (that's what replaces the old shared access code) — then the app
@@ -866,6 +925,7 @@ function Gate({ authError }: { authError: string | null }) {
       });
       if (error) throw error;
       setSent(true);
+      setCooldown(60);
     } catch {
       setErr("Couldn't send your login link. Try again in a minute.");
     } finally {
@@ -898,13 +958,45 @@ function Gate({ authError }: { authError: string | null }) {
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-7 text-center backdrop-blur-md">
             <div className="mb-3 text-4xl">📬</div>
             <h2 className="text-lg font-bold text-white">Check your email</h2>
-            <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-white/55">
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-white/55">
               We sent a login link to{" "}
-              <span className="font-semibold text-white/85">{email.trim().toLowerCase()}</span>. Click it
-              and you&apos;re in — no password, no code to type.
+              <span className="font-semibold text-white/85">{email.trim().toLowerCase()}</span>. There is{" "}
+              <span className="font-semibold text-white/85">no code to type</span> — the email has a
+              single button in it, and tapping it signs you in.
             </p>
-            <p className="mt-4 text-[11px] leading-relaxed text-white/35">
-              Didn&apos;t get it? Check spam, or{" "}
+            <div className="mx-auto mt-5 max-w-sm rounded-xl border border-white/10 bg-black/25 p-4 text-left">
+              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/40">
+                What to look for
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-white/60">
+                From <span className="font-semibold text-white/85">Trevs Agents</span>{" "}
+                <span className="text-white/40">(noreply@trevsagents.com)</span>, subject:
+              </p>
+              <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-white/60">
+                <li>
+                  <span className="font-semibold text-white/85">&ldquo;Your sign-in link&rdquo;</span>{" "}
+                  if you have signed in before
+                </li>
+                <li>
+                  <span className="font-semibold text-white/85">&ldquo;Confirm your email address&rdquo;</span>{" "}
+                  if this is your first time here
+                </li>
+              </ul>
+              <p className="mt-3 text-xs leading-relaxed text-amber-200/75">
+                On Outlook, Hotmail or Live it usually lands in <span className="font-semibold text-amber-100">Junk</span>{" "}
+                or under the <span className="font-semibold text-amber-100">Other</span> tab, not your inbox.
+              </p>
+            </div>
+            <p className="mt-4 text-xs leading-relaxed text-white/45">
+              Still nothing?{" "}
+              <button
+                onClick={() => { if (!cooldown) sendLink(); }}
+                disabled={busy || cooldown > 0}
+                className="text-violet-300 underline-offset-2 hover:underline disabled:cursor-default disabled:text-white/30 disabled:no-underline"
+              >
+                {cooldown > 0 ? `Send it again in ${cooldown}s` : "Send it again"}
+              </button>
+              {" "}or{" "}
               <button
                 onClick={() => { setSent(false); setErr(null); }}
                 className="text-violet-300 underline-offset-2 hover:underline"
@@ -912,6 +1004,9 @@ function Gate({ authError }: { authError: string | null }) {
                 try a different email
               </button>
               .
+            </p>
+            <p className="mx-auto mt-3 max-w-sm text-[11px] leading-relaxed text-white/30">
+              Still stuck? Ask in the Discord and Trevor can send you a link directly.
             </p>
           </div>
         ) : (
@@ -938,6 +1033,16 @@ function Gate({ authError }: { authError: string | null }) {
               type="email"
               className="mb-1.5 w-full rounded-lg border border-white/12 bg-black/40 px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-white/25 focus:border-violet-300/60"
             />
+            {suggestion && (
+              <button
+                type="button"
+                onClick={() => setEmail(suggestion)}
+                className="mb-2 w-full rounded-lg border border-amber-400/30 bg-amber-500/[0.07] px-3 py-2 text-left text-xs leading-relaxed text-amber-100 transition-colors hover:bg-amber-500/[0.12]"
+              >
+                Did you mean <span className="font-semibold">{suggestion}</span>? That domain cannot
+                receive mail, so the login link would never arrive. Tap to fix.
+              </button>
+            )}
             <p className="mb-4 flex items-start gap-1.5 text-[11px] leading-relaxed text-amber-200/80">
               <span>⚠️</span>
               <span>
